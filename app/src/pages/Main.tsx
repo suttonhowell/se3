@@ -7,7 +7,7 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  Toolbar,
+  Toolbar
 } from '@mui/material';
 import { Canvas } from '../components/Canvas';
 import { TopBar } from '../components/layout/TopBar';
@@ -16,7 +16,7 @@ const drawerWidth = 56;
 
 export const Main = () => {
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', height: '100%' }}>
       <CssBaseline />
       <TopBar />
       <Drawer
@@ -25,8 +25,8 @@ export const Main = () => {
           flexShrink: 0,
           '& .MuiDrawer-paper': {
             width: drawerWidth,
-            boxSizing: 'border-box',
-          },
+            boxSizing: 'border-box'
+          }
         }}
         variant="permanent"
         anchor="left"
@@ -36,18 +36,15 @@ export const Main = () => {
         <List>
           {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
             <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <Inbox /> : <Mail />}
-              </ListItemIcon>
+              <ListItemIcon>{index % 2 === 0 ? <Inbox /> : <Mail />}</ListItemIcon>
             </ListItem>
           ))}
         </List>
       </Drawer>
       <Box
         component="main"
-        sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+        sx={{ flexGrow: 1, bgcolor: 'background.default', pt: 8, height: '100%' }}
       >
-        <Toolbar />
         <Canvas />
       </Box>
     </Box>
