@@ -1,6 +1,5 @@
 export interface DCRGraph {
   activies: Activity[];
-  relations: Relation[];
   metaData: {
     name: string;
     // Saved for meta data
@@ -11,7 +10,7 @@ export interface Activity {
   aid: Aid;
   label: string;
   position: Position;
-  marking: {
+  markings: {
     pending: boolean;
     included: boolean;
     executed: boolean;
