@@ -1,4 +1,5 @@
 import { Button } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 
 export const Canvas = () => {
   const resetSystem = async () => {
@@ -18,6 +19,9 @@ export const Canvas = () => {
       <Button onClick={() => toggleMode()}>Toggle dark mode</Button>
       <Button onClick={() => resetSystem()}>Reset to system</Button>
 
+      <Button component={RouterLink} variant="contained" to="/">
+        Go to frontpage
+      </Button>
       <svg
         style={{
           height: '100%',
