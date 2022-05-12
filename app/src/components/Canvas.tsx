@@ -1,13 +1,14 @@
+import { Activity } from '../pages/Editor/components/Activity';
+
 export const Canvas = () => {
   return (
     <svg
       style={{
         height: '100%',
-        width: '100%',
-        position: 'absolute',
-        top: 0,
-        left: 0,
+        width: '100%'
       }}
-    ></svg>
+    >
+      <Activity />
+    </svg>
   );
 };
