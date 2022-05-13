@@ -23,7 +23,7 @@ export interface Activity {
     // borderType: BorderType;
   };
   relations: Relation[];
-  parrent: Aid;
+  parrent?: Aid;
   nestedActivities: Activity[];
 }
 
@@ -38,7 +38,7 @@ enum RelationType {
   Spawn,
   Condition,
   Milestone,
-  Value
+  Value,
 }
 export interface Relation {
   to: Aid;
