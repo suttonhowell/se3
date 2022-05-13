@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
-import { Canvas } from '../components/Canvas';
 import { TopBar } from '../components/layout/TopBar';
 import { AddActivity } from './Editor/components/AddActivity';
+import { Canvas } from './Editor/components/Canvas';
 
 const drawerWidth = 56;
 
