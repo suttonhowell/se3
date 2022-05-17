@@ -27,7 +27,7 @@ export interface Activity {
   nestedActivities: Activity[];
 }
 
-type Aid = string;
+export type Aid = string;
 enum RelationType {
   PreCondition,
   Response,

@@ -1,13 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
-import { DCRGraph } from '../../../models/DCRGraph';
-import { RootState } from '../../store';
+import { Aid, DCRGraph } from '../../../models/DCRGraph';
 
 interface EditorState {
   graph?: DCRGraph;
+  selectedElement: Aid | null;
 }
 
-const initialState: EditorState = {};
+const initialState: EditorState = {
+  selectedElement: null,
+};
 
 export const editorSlice = createSlice({
   name: 'editor',
@@ -36,6 +38,9 @@ export const editorSlice = createSlice({
         nestedActivities: [],
       });
     },
+    selectElement: (state, action: PayloadAction<Aid>) => {
+      state.selectedElement = action.payload;
+    },
     changeTitle: (state, action: PayloadAction<string>) => {
       if (state.graph) {
         state.graph.metaData.name = action.payload;
@@ -44,8 +49,6 @@ export const editorSlice = createSlice({
   },
 });
 
-export const { createNewGraph, addActivity, changeTitle } = editorSlice.actions;
-
-export const selectEditor = (state: RootState) => state.editor;
+export const { createNewGraph, addActivity, selectElement, changeTitle } = editorSlice.actions;
 
 export default editorSlice.reducer;

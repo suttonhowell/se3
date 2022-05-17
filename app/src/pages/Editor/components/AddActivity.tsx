@@ -1,11 +1,13 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import { Fab } from '@mui/material';
+import { addActivity } from '../../../core/redux/features/editor/editorSlice';
+import { useAppDispatch } from '../../../core/redux/hooks';
 
 export const AddActivity = () => {
-  const handleOnClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
-    if (e) {
-      console.log('Fab was clicked', e.clientX, e.clientY);
-    }
+  const dispatch = useAppDispatch();
+  const handleOnClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    dispatch(addActivity());
   };
 
   return (
