@@ -75,12 +75,12 @@ export const ButtonDropDown = ({
             {...buttonProps}
             endIcon={open ? <DropUpIcon /> : <DropDownIcon />}
             onClick={handleClick}
-            sx={{
-              color: 'text.secondary',
+            sx={(theme) => ({
+              color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.secondary',
               justifyContent: 'space-between',
               minWidth: 70,
               '& .MuiButton-endIcon': { ml: 0 },
-            }}
+            })}
           >
             {buttonText}
           </Button>
