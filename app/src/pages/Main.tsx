@@ -9,13 +9,8 @@ export const Main = () => {
   return (
     <Box sx={{ display: 'flex', height: '100%' }}>
       <TopBar />
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, bgcolor: 'background.default', pt: 8, height: '100%' }}
-      >
-        <Canvas />
-        <AddActivity />
-      </Box>
+      <Canvas />
+      <AddActivity />
     </Box>
   );
 };

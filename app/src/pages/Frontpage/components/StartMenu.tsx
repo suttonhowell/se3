@@ -53,7 +53,7 @@ export const StartMenu = () => {
               }}
             >
               <ListItemIcon sx={{ minWidth: 32 }}>{mi.icon}</ListItemIcon>
-              <ListItemText primary={mi.label} />
+              <ListItemText primary={mi.label} primaryTypographyProps={{ color: 'textPrimary' }} />
             </ListItemButton>
           </ListItem>
         ))}
