@@ -26,6 +26,16 @@
  * ```
  */
 
-import './index.css';
+// Gloabl interface for adding ipcCalls
+declare global {
+  interface Window {
+    darkMode: {
+      get: () => Promise<'system' | 'light' | 'dark'>;
+      toggle: () => Promise<boolean>;
+      system: () => Promise<void>;
+    };
+  }
+}
 
 import './App';
+import './index.css';

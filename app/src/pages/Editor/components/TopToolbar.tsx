@@ -13,7 +13,7 @@ import {
   Menu,
   MenuItem,
   Toolbar,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useState } from 'react';
@@ -83,13 +83,25 @@ export const TopToolbar = () => {
               </Tooltip>
 
               <Tooltip title="History" arrow disableInteractive>
-                <IconButton disabled={!hasHistory} onClick={handleOnClickHistory} aria-label="history">
+                <IconButton
+                  disabled={!hasHistory}
+                  onClick={handleOnClickHistory}
+                  aria-label="history"
+                >
                   <HistoryRoundedIcon />
                 </IconButton>
               </Tooltip>
             </Box>
             <Divider orientation="vertical" flexItem sx={{ borderRightWidth: 2 }} />
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', px: 2, width: '80px' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                px: 2,
+                width: '80px',
+              }}
+            >
               <Tooltip title="Zoom" arrow disableInteractive>
                 <Button onClick={handleOnClickZoom} endIcon={<KeyboardArrowDown />}>
                   {zoomLevel}%
@@ -99,13 +111,21 @@ export const TopToolbar = () => {
             <Divider orientation="vertical" flexItem sx={{ borderRightWidth: 2 }} />
             <Box sx={{ px: 1 }}>
               <Tooltip title="Zoom in" arrow disableInteractive>
-                <IconButton disabled={zoomList.indexOf(zoomLevel) === zoomList.length - 1} onClick={handleOnClickZoomIn} aria-label="zoomin">
+                <IconButton
+                  disabled={zoomList.indexOf(zoomLevel) === zoomList.length - 1}
+                  onClick={handleOnClickZoomIn}
+                  aria-label="zoomin"
+                >
                   <ZoomInRoundedIcon />
                 </IconButton>
               </Tooltip>
 
               <Tooltip title="Zoom out" arrow disableInteractive>
-                <IconButton disabled={zoomList.indexOf(zoomLevel) === 0} onClick={handleOnClickZoomOut} aria-label="zoomout">
+                <IconButton
+                  disabled={zoomList.indexOf(zoomLevel) === 0}
+                  onClick={handleOnClickZoomOut}
+                  aria-label="zoomout"
+                >
                   <ZoomOutRoundedIcon />
                 </IconButton>
               </Tooltip>
@@ -113,7 +133,11 @@ export const TopToolbar = () => {
             <Divider orientation="vertical" flexItem sx={{ borderRightWidth: 2 }} />
             <Box sx={{ px: 1 }}>
               <Tooltip title="Delete" arrow disableInteractive>
-                <IconButton disabled={!hasSelected} onClick={handleOnClickDelete} aria-label="delete">
+                <IconButton
+                  disabled={!hasSelected}
+                  onClick={handleOnClickDelete}
+                  aria-label="delete"
+                >
                   <DeleteRoundedIcon />
                 </IconButton>
               </Tooltip>
@@ -127,7 +151,7 @@ export const TopToolbar = () => {
         open={zoomOpen}
         onClose={zoomHandleClose}
         MenuListProps={{
-          'aria-labelledby': 'basic-button'
+          'aria-labelledby': 'basic-button',
         }}
       >
         {zoomList.map((item, idx) => (
