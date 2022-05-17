@@ -10,10 +10,7 @@ export const Main = () => {
     <Box sx={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
       <TopBar />
       <TopToolbar />
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, bgcolor: 'background.default', pt: 8, height: '100%' }}
-      >
+      <Box component="main" sx={{ flexGrow: 1, bgcolor: 'background.default', height: '100%' }}>
         <Canvas />
       </Box>
     </Box>
