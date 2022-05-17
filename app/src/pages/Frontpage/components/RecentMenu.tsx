@@ -20,6 +20,7 @@ export const RecentMenu = () => {
           <ListItem key={fmi.fileName + idx} disableGutters disablePadding>
             <ListItemText
               primary={fmi.fileName}
+              primaryTypographyProps={{ color: 'textPrimary' }}
               secondary={fmi.path}
               sx={{
                 my: '3px',
