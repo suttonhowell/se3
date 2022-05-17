@@ -8,7 +8,7 @@ const Frontpage = () => {
       <Grid container spacing={2} alignItems="center" sx={{ minHeight: '100%' }}>
         <Grid item xs={12} sm={6} md={6}>
           <Box sx={{ mb: 5 }}>
-            <Typography variant="h1" sx={{ mb: 0.5 }}>
+            <Typography variant="h1" color="textPrimary" sx={{ mb: 0.5 }}>
               DCR Maker
             </Typography>
             <Typography variant="h3" color="textSecondary">
