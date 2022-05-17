@@ -6,7 +6,7 @@ export const TopBar = () => {
     <AppBar
       position="relative"
       sx={(theme) => ({
-        zIndex: theme.zIndex.drawer + 1
+        zIndex: theme.zIndex.drawer + 1,
       })}
     >
       <Toolbar disableGutters sx={{ px: 2 }}>
@@ -17,7 +17,7 @@ export const TopBar = () => {
             lineHeight: 1,
             bgcolor: '#00000040',
             borderRadius: '100%',
-            display: 'flex'
+            display: 'flex',
           }}
         >
           <AccountTreeIcon fontSize="medium" />
