@@ -1,14 +1,25 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
-import { Aid, DCRGraph } from '../../../models/DCRGraph';
+import { Aid, DCRGraph, Position } from '../../../models/DCRGraph';
 
 interface EditorState {
   graph?: DCRGraph;
   selectedElement: Aid | null;
+  offset: Position | null;
 }
 
 const initialState: EditorState = {
+  graph:
+    process.env.NODE_ENV === 'production'
+      ? undefined
+      : {
+          activies: [],
+          metaData: {
+            name: 'Untitled.dcr',
+          },
+        },
   selectedElement: null,
+  offset: null,
 };
 
 export const editorSlice = createSlice({
@@ -33,13 +44,20 @@ export const editorSlice = createSlice({
           included: false,
           executed: false,
         },
-        customization: {},
+        style: {
+          borderColor: 'black',
+          bgColor: 'white',
+          textColor: 'black',
+        },
         relations: [],
         nestedActivities: [],
       });
     },
-    selectElement: (state, action: PayloadAction<Aid>) => {
+    selectElement: (state, action: PayloadAction<Aid | null>) => {
       state.selectedElement = action.payload;
+    },
+    setOffset: (state, action: PayloadAction<Position | null>) => {
+      state.offset = action.payload;
     },
     changeTitle: (state, action: PayloadAction<string>) => {
       if (state.graph) {
@@ -49,6 +67,7 @@ export const editorSlice = createSlice({
   },
 });
 
-export const { createNewGraph, addActivity, selectElement, changeTitle } = editorSlice.actions;
+export const { createNewGraph, addActivity, selectElement, setOffset, changeTitle } =
+  editorSlice.actions;
 
 export default editorSlice.reducer;

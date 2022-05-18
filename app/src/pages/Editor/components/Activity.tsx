@@ -1,72 +1,57 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef } from 'react';
+import { batch } from 'react-redux';
 import { Activity as ActivityType } from '../../../core/models/DCRGraph';
-import { selectElement } from '../../../core/redux/features/editor/editorSlice';
-import { useAppDispatch } from '../../../core/redux/hooks';
-
-// const getMousePosition = (
-//   e: React.MouseEvent<SVGRectElement, MouseEvent>,
-//   canvasRef: SVGSVGElement
-// ) => {
-//   const CTM = canvasRef.getCTM() as DOMMatrix;
-//   return {
-//     x: (e.clientX - CTM.e) / CTM.a,
-//     y: (e.clientY - CTM.f) / CTM.d,
-//   };
-// };
+import { selectElement, setOffset } from '../../../core/redux/features/editor/editorSlice';
+import { useAppDispatch, useAppSelector } from '../../../core/redux/hooks';
 
 interface ActivityProps extends ActivityType {
   canvasRef: React.RefObject<SVGSVGElement>;
-  // ref: React.RefObject<SVGRectElement> | null;
 }
 
+const getMousePosition = (
+  e: React.MouseEvent<SVGElement, MouseEvent>,
+  canvasRef: React.RefObject<SVGSVGElement>
+) => {
+  const CTM = (canvasRef.current as SVGSVGElement).getCTM() as DOMMatrix;
+  return {
+    x: (e.clientX - CTM.e) / CTM.a,
+    y: (e.clientY - CTM.f) / CTM.d,
+  };
+};
+
 export const Activity = forwardRef<SVGRectElement, ActivityProps>((props, ref) => {
+  const { selectedElement } = useAppSelector((state) => state.editor);
   const dispatch = useAppDispatch();
 
-  const [isBeingDragged, setIsBeingDragged] = useState(false);
-  const [position, setPosition] = useState(props.position);
-  const [mouseOffset, setMouseOffSet] = useState({ x: 0, y: 0 });
-
-  // const startDrag = (e: React.MouseEvent<SVGRectElement, MouseEvent>) => {
-  //   e.preventDefault();
-  //   const { x, y } = getMousePosition(e, props.canvasRef.current as SVGSVGElement);
-  //   setMouseOffSet({ x: x - position.x, y: y - position.y });
-  //   setIsBeingDragged(true);
-  // };
-  const startDrag = (e: React.MouseEvent<SVGRectElement, MouseEvent>) => {
+  const startDrag = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     e.preventDefault();
-    dispatch(selectElement(props.aid));
-    // const { x, y } = getMousePosition(e, props.canvasRef.current as SVGSVGElement);
-    // setMouseOffSet({ x: x - position.x, y: y - position.y });
-    // setIsBeingDragged(true);
+    const { x, y } = getMousePosition(e, props.canvasRef);
+    batch(() => {
+      dispatch(selectElement(props.aid));
+      dispatch(
+        setOffset({
+          x: x - props.position.x,
+          y: y - props.position.y,
+        })
+      );
+    });
   };
-
-  // const drag = (e: React.MouseEvent<SVGRectElement, MouseEvent>) => {
-  //   if (isBeingDragged) {
-  //     e.preventDefault();
-
-  //     const { x, y } = getMousePosition(e, props.canvasRef.current as SVGSVGElement);
-  //     setPosition({ x: x - mouseOffset.x, y: y - mouseOffset.y });
-  //   }
-  // };
 
   return (
     <rect
       ref={ref}
       className="draggable"
-      x={position.x}
-      y={position.y}
+      x={props.position.x}
+      y={props.position.y}
       onMouseDown={(e) => startDrag(e)}
-      onClick={(e) => console.log(e.currentTarget)}
-      // onMouseMove={(e) => drag(e)}
-      // onMouseUp={() => setIsBeingDragged(false)}
-      // onClick={(e) => getMousePosition(props.canvasRef.current as SVGSVGElement, e)}
       rx="10"
       ry="10"
       width="100"
       height="100"
-      stroke="black"
-      fill="transparent"
+      stroke={selectedElement === props.aid ? 'blue' : props.style.borderColor}
+      fill={props.style.bgColor}
       strokeWidth="5"
+      style={{ cursor: 'move' }}
     />
   );
 });
