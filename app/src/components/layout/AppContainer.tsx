@@ -10,7 +10,10 @@ export const AppContainer = () => {
       elevation={1}
     >
       <TopBar />
-      <Box component="main" sx={{ flexGrow: 1, height: '100%' }}>
+      <Box
+        component="main"
+        sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, height: '100%' }}
+      >
         <Outlet />
       </Box>
     </Box>
