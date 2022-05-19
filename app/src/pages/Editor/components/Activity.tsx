@@ -1,49 +1,24 @@
-import { forwardRef } from 'react';
-import { batch } from 'react-redux';
 import { Activity as ActivityType } from '../../../core/models/DCRGraph';
-import { selectElement, setOffset } from '../../../core/redux/features/editor/editorSlice';
+import { selectElement } from '../../../core/redux/features/editor/editorSlice';
 import { useAppDispatch, useAppSelector } from '../../../core/redux/hooks';
 
-interface ActivityProps extends ActivityType {
-  canvasRef: React.RefObject<SVGSVGElement>;
-}
+interface ActivityProps extends ActivityType {}
 
-const getMousePosition = (
-  e: React.MouseEvent<SVGElement, MouseEvent>,
-  canvasRef: React.RefObject<SVGSVGElement>
-) => {
-  const CTM = (canvasRef.current as SVGSVGElement).getCTM() as DOMMatrix;
-  return {
-    x: (e.clientX - CTM.e) / CTM.a,
-    y: (e.clientY - CTM.f) / CTM.d,
-  };
-};
-
-export const Activity = forwardRef<SVGRectElement, ActivityProps>((props, ref) => {
-  const { selectedElement } = useAppSelector((state) => state.editor);
+export const Activity = (props: ActivityProps) => {
   const dispatch = useAppDispatch();
+  const { selectedElement } = useAppSelector((state) => state.editor);
 
-  const startDrag = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
-    e.preventDefault();
-    const { x, y } = getMousePosition(e, props.canvasRef);
-    batch(() => {
-      dispatch(selectElement(props.aid));
-      dispatch(
-        setOffset({
-          x: x - props.position.x,
-          y: y - props.position.y,
-        })
-      );
-    });
+  const handleSelectElement = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
+    dispatch(selectElement(props.aid));
   };
 
   return (
     <rect
-      ref={ref}
+      id={props.aid}
       className="draggable"
       x={props.position.x}
       y={props.position.y}
-      onMouseDown={(e) => startDrag(e)}
+      onMouseDown={handleSelectElement}
       rx="10"
       ry="10"
       width="100"
@@ -54,4 +29,4 @@ export const Activity = forwardRef<SVGRectElement, ActivityProps>((props, ref) =
       style={{ cursor: 'move' }}
     />
   );
-});
+};
