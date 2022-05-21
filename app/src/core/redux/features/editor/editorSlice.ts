@@ -64,10 +64,20 @@ export const editorSlice = createSlice({
         state.graph.metaData.name = action.payload;
       }
     },
+    moveActivity: (state, action: PayloadAction<{ aid: Aid; position: Position }>) => {
+      if (state.graph) {
+        const updatedActivities = state.graph.activies.map((activity) =>
+          activity.aid !== action.payload.aid
+            ? activity
+            : { ...activity, position: action.payload.position }
+        );
+        state.graph.activies = updatedActivities;
+      }
+    },
   },
 });
 
-export const { createNewGraph, addActivity, selectElement, setOffset, changeTitle } =
+export const { createNewGraph, addActivity, selectElement, setOffset, changeTitle, moveActivity } =
   editorSlice.actions;
 
 export default editorSlice.reducer;
