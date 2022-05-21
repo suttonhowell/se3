@@ -18,12 +18,6 @@ These instructions describe how to set up the project for local development.
 - 3. To run the app in development mode run the following `npm run start` command from the `app` directory. This will start the app in development mode. When in development mode, the app will be automatically reloaded when you make changes to the code.
   - **Note:** This will fail if you try to run it from WSL - though it is possible to run it from WSL with some workaround, [read more here](https://www.beekeeperstudio.io/blog/building-electron-windows-ubuntu-wsl2).
 
-## Todo
-
-- [ ] Install reduxtoolkit
-- [ ] Add redux-devtools
-- [ ] Add react router dom with hashRouter if we need to change pages
-
 ## Usefull links and documentation
 
 - [SVG documentation](https://developer.mozilla.org/en-US/docs/Web/SVG#documentation)
@@ -32,6 +26,7 @@ These instructions describe how to set up the project for local development.
 - [MUI documentation](https://mui.com/material-ui/getting-started/installation/)
 - [Electron documentation](https://www.electronjs.org/docs/latest)
 - [Tutorial on drag-and-drop SVG's](https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/)
+- [SVG dynamic wordwrapping](https://medium.com/@CarysMills/wrapping-svg-text-without-svg-2-ecbfb58f7ba4)
 
 ## Question for Tijs
 
