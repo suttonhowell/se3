@@ -4,7 +4,7 @@ import { ProjectTitle } from './ProjectTitle';
 
 export const TopBar = () => {
   // since we don't want to have the title in the frontpage
-  let isInEditor = true; // TODO get this info from router
+  let isInEditor = false; // TODO get this info from router
 
   return (
     <AppBar
@@ -25,11 +25,12 @@ export const TopBar = () => {
           }}
         >
           <AccountTreeIcon fontSize="medium" />
-        </Box>
-        <Typography variant="h6" noWrap component="div">
+        </Box>   
+        {isInEditor 
+        ? <ProjectTitle/>
+        : <Typography variant="h6" noWrap component="div">
           DCR Graph Editor
-        </Typography>
-        {isInEditor && <ProjectTitle/>}  
+        </Typography>}  
       </Toolbar>
     </AppBar>
   );
