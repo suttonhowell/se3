@@ -1,7 +1,11 @@
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import { AppBar, Box, Toolbar, Typography } from '@mui/material';
+import { ProjectTitle } from './ProjectTitle';
 
 export const TopBar = () => {
+  // since we don't want to have the title in the frontpage
+  let isInEditor = true; // TODO get this info rom router
+
   return (
     <AppBar
       position="fixed"
@@ -25,6 +29,7 @@ export const TopBar = () => {
         <Typography variant="h6" noWrap component="div">
           DCR Graph Editor
         </Typography>
+        {isInEditor && <ProjectTitle/>}  
       </Toolbar>
     </AppBar>
   );
