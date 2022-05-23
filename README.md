@@ -27,8 +27,3 @@ These instructions describe how to set up the project for local development.
 - [Electron documentation](https://www.electronjs.org/docs/latest)
 - [Tutorial on drag-and-drop SVG's](https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/)
 - [SVG dynamic wordwrapping](https://medium.com/@CarysMills/wrapping-svg-text-without-svg-2-ecbfb58f7ba4)
-
-## Question for Tijs
-
-- Talk with him about the DCRGraph data structure espacially the RelationType
-- Talk features with Tijs
