@@ -41,7 +41,7 @@ export const editorSlice = createSlice({
         position: { x: 100, y: 100 },
         markings: {
           pending: false,
-          included: false,
+          included: true,
           executed: false,
         },
         style: {
