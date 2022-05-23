@@ -1,4 +1,4 @@
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { Fab } from '@mui/material';
 import { addActivity } from '../../../core/redux/features/editor/editorSlice';
 import { useAppDispatch } from '../../../core/redux/hooks';
@@ -17,7 +17,7 @@ export const AddActivity = () => {
       aria-label="add"
       sx={{ position: 'absolute', bottom: 16, left: 16 }}
     >
-      <AddOutlinedIcon />
+      <AddRoundedIcon />
     </Fab>
   );
 };
