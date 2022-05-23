@@ -10,6 +10,7 @@ import { AppBar, Divider, IconButton, Toolbar, Tooltip } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { Fragment, useState } from 'react';
 import { ButtonDropDown, DropDownItemProps } from '../../../components/navigation/ButtonDropDown';
+import { IterArray } from '../../../core/utils/iterArray';
 
 type MenuState = {
   hasHistory: boolean;
@@ -17,12 +18,15 @@ type MenuState = {
   zoomLevel: number;
 };
 
+const zoomLevelsIncrements = [25, 30, 35, 40, 50, 60, 70, 85, 100, 120, 145, 175, 210, 250, 300];
+
 export const TopToolbar = () => {
   const [menuState, setMenuState] = useState<MenuState>({
     hasHistory: true,
     hasSelected: true,
     zoomLevel: 100,
   });
+  const [zoomLevels, setZoomLevel] = useState(IterArray(zoomLevelsIncrements, 8));
 
   const handleOnClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const { name } = e.currentTarget;
