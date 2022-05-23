@@ -13,10 +13,10 @@ These instructions describe how to set up the project for local development.
 
 ### Setup
 
-- 1. Clone the project to you local machine.
-- 2. Go to the `app` directory and run the following command: `npm install`. This will install all the dependencies.
-- 3. To run the app in development mode run the following `npm run start` command from the `app` directory. This will start the app in development mode. When in development mode, the app will be automatically reloaded when you make changes to the code.
-  - **Note:** This will fail if you try to run it from WSL - though it is possible to run it from WSL with some workaround, [read more here](https://www.beekeeperstudio.io/blog/building-electron-windows-ubuntu-wsl2).
+1. Clone the project to you local machine.
+2. Go to the `app` directory and run the following command: `npm install`. This will install all the dependencies.
+3. To run the app in development mode run the following `npm run start` command from the `app` directory. This will start the app in development mode. When in development mode, the app will be automatically reloaded when you make changes to the code.
+   - **Note:** This will fail if you try to run it from WSL - though it is possible to run it from WSL with some workaround, [read more here](https://www.beekeeperstudio.io/blog/building-electron-windows-ubuntu-wsl2).
 
 ## Usefull links and documentation
 
