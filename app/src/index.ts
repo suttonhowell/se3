@@ -16,7 +16,7 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const createWindow = async (): Promise<void> => {
+const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     height: 600,
@@ -27,7 +27,7 @@ const createWindow = async (): Promise<void> => {
   });
 
   // and load the index.html of the app.
-  await mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
