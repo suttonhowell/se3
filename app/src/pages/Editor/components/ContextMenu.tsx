@@ -3,13 +3,13 @@ import { ColorPicker } from '../../../components/inputFields/ColorPicker';
 import { useAppSelector } from '../../../core/redux/hooks';
 
 export const ContextMenu = () => {
-  const { selectedElement, activies } = useAppSelector((state) => ({
+  const { selectedElement, activities } = useAppSelector((state) => ({
     selectedElement: state.editor.selectedElement,
-    activies: state.editor.graph?.activies,
+    activities: state.editor.graph.activities,
   }));
 
-  if (activies && selectedElement) {
-    const activity = activies.find((a) => a.aid === selectedElement);
+  if (activities && selectedElement) {
+    const activity = activities.find((a) => a.aid === selectedElement);
     console.log(activity);
   }
 
