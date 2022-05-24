@@ -18,7 +18,9 @@ type MenuState = {
   zoomLevel: number;
 };
 
-const zoomLevelsIncrements = [25, 30, 35, 40, 50, 60, 70, 85, 100, 120, 145, 175, 210, 250, 300];
+const zoomLevelsIncrements = [
+  25, 30, 35, 40, 50, 60, 75, 85, 100, 120, 140, 150, 175, 200, 250, 300,
+];
 
 export const TopToolbar = () => {
   const [menuState, setMenuState] = useState<MenuState>({
@@ -26,7 +28,7 @@ export const TopToolbar = () => {
     hasSelected: true,
     zoomLevel: 100,
   });
-  const [prevClosest, nextClosest] = useIterNumberArray(zoomLevelsIncrements);
+  const [predecessor, successor] = useIterNumberArray(zoomLevelsIncrements, 100);
 
   const handleOnClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const { name } = e.currentTarget;
@@ -42,13 +44,13 @@ export const TopToolbar = () => {
       case 'zoomIn':
         setMenuState((prevState) => ({
           ...prevState,
-          zoomLevel: nextClosest(prevState.zoomLevel),
+          zoomLevel: successor(prevState.zoomLevel),
         }));
         break;
       case 'zoomOut':
         setMenuState((prevState) => ({
           ...prevState,
-          zoomLevel: prevClosest(prevState.zoomLevel),
+          zoomLevel: predecessor(prevState.zoomLevel),
         }));
         break;
       case 'delete':
@@ -124,7 +126,6 @@ interface MenuButtonProps {
   icon?: JSX.Element;
   state: keyof MenuState;
 }
-
 type MenuItemButtonGroupProps = MenuButtonProps[];
 
 const menuItemButtonGroups: MenuItemButtonGroupProps[] = [

@@ -1,37 +1,38 @@
-export const useIterNumberArray = (arr: Array<number>) => {
-  const array = arr;
+export const useIterNumberArray = (arr: Array<number>, defaultValue: number) => {
+  const array = Array.from(new Set(arr)).sort((a, b) => a - b);
 
-  const prevClosest = (notInIndex: number) => {
-    if (notInIndex > array[array.length - 1]) {
+  const predecessor = (currentElement: number): number => {
+    if (array.length == 0) return defaultValue;
+    if (currentElement > array[array.length - 1]) {
       return array[array.length - 1];
     }
-    if (notInIndex <= array[0]) {
+    if (currentElement <= array[0]) {
       return array[0];
     }
-    var retval = 0;
-    for (var i = 0; i < array.length; i++) {
-      if (array[i] < notInIndex) continue;
-      retval = array[i - 1];
-      break;
+    // This loop will always return an array value
+    for (var i = array.length - 1; i >= 0; i--) {
+      if (array[i] < currentElement) return array[i];
     }
-    return retval;
+    // We need to a return value for TS to infer that we cannot return undefined
+    return defaultValue;
   };
 
-  const nextClosest = (notInIndex: number): number => {
-    if (notInIndex >= array[array.length - 1]) {
+  const successor = (currentElement: number): number => {
+    if (array.length == 0) return defaultValue;
+    if (currentElement >= array[array.length - 1]) {
       return array[array.length - 1];
     }
-    if (notInIndex < array[0]) {
+    if (currentElement < array[0]) {
       return array[0];
     }
-    var retval = 0;
+    defaultValue;
+    // This loop will always return an array value
     for (var i = 0; i < array.length; i++) {
-      if (array[i] <= notInIndex) continue;
-      retval = array[i];
-      break;
+      if (array[i] > currentElement) return array[i];
     }
-    return retval;
+    // We need to a return value for TS to infer that we cannot return undefined
+    return defaultValue;
   };
 
-  return [prevClosest, nextClosest];
+  return [predecessor, successor];
 };
