@@ -15,19 +15,17 @@ export interface Activity {
     included: boolean;
     executed: boolean;
   };
-  // Visuals
-  customization: {
-    // borderColor: string
-    // textColor: string;
-    // bgColor: string;
-    // borderType: BorderType;
+  style: {
+    borderColor: string;
+    textColor: string;
+    bgColor: string;
   };
   relations: Relation[];
-  parrent: Aid;
+  parrent?: Aid;
   nestedActivities: Activity[];
 }
 
-type Aid = string;
+export type Aid = string;
 enum RelationType {
   PreCondition,
   Response,
