@@ -3,7 +3,6 @@ import { AppBar, Box, Toolbar, Typography } from '@mui/material';
 import { ProjectTitle } from './ProjectTitle';
 
 export const TopBar = () => {
-  // since we don't want to have the title in the frontpage
   let isInEditor = true; // TODO get this info from router
 
   return (
