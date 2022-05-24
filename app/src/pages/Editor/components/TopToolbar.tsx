@@ -10,7 +10,7 @@ import { AppBar, Divider, IconButton, Toolbar, Tooltip } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { Fragment, useState } from 'react';
 import { ButtonDropDown, DropDownItemProps } from '../../../components/navigation/ButtonDropDown';
-import { IterArray } from '../../../core/utils/iterArray';
+import { useIterNumberArray } from '../../../core/hooks/useIterArray';
 
 type MenuState = {
   hasHistory: boolean;
@@ -26,7 +26,7 @@ export const TopToolbar = () => {
     hasSelected: true,
     zoomLevel: 100,
   });
-  const [zoomLevels, setZoomLevel] = useState(IterArray(zoomLevelsIncrements, 8));
+  const [prevClosest, nextClosest] = useIterNumberArray(zoomLevelsIncrements);
 
   const handleOnClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const { name } = e.currentTarget;
@@ -42,13 +42,13 @@ export const TopToolbar = () => {
       case 'zoomIn':
         setMenuState((prevState) => ({
           ...prevState,
-          zoomLevel: prevState.zoomLevel + 25,
+          zoomLevel: prevClosest(prevState.zoomLevel),
         }));
         break;
       case 'zoomOut':
         setMenuState((prevState) => ({
           ...prevState,
-          zoomLevel: prevState.zoomLevel - 15,
+          zoomLevel: nextClosest(prevState.zoomLevel),
         }));
         break;
       case 'delete':
@@ -69,7 +69,7 @@ export const TopToolbar = () => {
       zoomLevel: value,
     }));
   };
-
+  console.log(menuState.zoomLevel);
   return (
     <>
       <AppBar position="relative" color="inherit" elevation={4}>
