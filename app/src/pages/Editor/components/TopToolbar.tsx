@@ -42,13 +42,13 @@ export const TopToolbar = () => {
       case 'zoomIn':
         setMenuState((prevState) => ({
           ...prevState,
-          zoomLevel: prevClosest(prevState.zoomLevel),
+          zoomLevel: nextClosest(prevState.zoomLevel),
         }));
         break;
       case 'zoomOut':
         setMenuState((prevState) => ({
           ...prevState,
-          zoomLevel: nextClosest(prevState.zoomLevel),
+          zoomLevel: prevClosest(prevState.zoomLevel),
         }));
         break;
       case 'delete':
