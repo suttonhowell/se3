@@ -69,7 +69,7 @@ export const TopToolbar = () => {
       zoomLevel: value,
     }));
   };
-  console.log(menuState.zoomLevel);
+
   return (
     <>
       <AppBar position="relative" color="inherit" elevation={4}>
