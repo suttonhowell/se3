@@ -57,24 +57,38 @@ export const editorSlice = createSlice({
       state.offset = action.payload;
     },
     changeTitle: (state, action: PayloadAction<string>) => {
-      if (state.graph) {
-        state.graph.metaData.name = action.payload;
-      }
+      state.graph.metaData.name = action.payload;
     },
-    moveActivity: (state, action: PayloadAction<{ aid: Aid; position: Position }>) => {
-      if (state.graph) {
+    changeActivityLabel: (state, action: PayloadAction<{ label: string; aid: string | null }>) => {
+      if (action.payload.aid) {
         const updatedActivities = state.graph.activities.map((activity) =>
-          activity.aid !== action.payload.aid
-            ? activity
-            : { ...activity, position: action.payload.position }
+          activity.aid === action.payload.aid
+            ? { ...activity, label: action.payload.label }
+            : activity
         );
         state.graph.activities = updatedActivities;
       }
+      return state;
+    },
+    moveActivity: (state, action: PayloadAction<{ aid: Aid; position: Position }>) => {
+      const updatedActivities = state.graph.activities.map((activity) =>
+        activity.aid !== action.payload.aid
+          ? activity
+          : { ...activity, position: action.payload.position }
+      );
+      state.graph.activities = updatedActivities;
     },
   },
 });
 
-export const { createNewGraph, addActivity, selectElement, setOffset, changeTitle, moveActivity } =
-  editorSlice.actions;
+export const {
+  createNewGraph,
+  addActivity,
+  selectElement,
+  setOffset,
+  changeTitle,
+  moveActivity,
+  changeActivityLabel,
+} = editorSlice.actions;
 
 export default editorSlice.reducer;
