@@ -38,7 +38,7 @@ enum RelationType {
   Spawn,
   Condition,
   Milestone,
-  Value
+  Value,
 }
 export interface Relation {
   to: Aid;
