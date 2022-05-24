@@ -1,7 +1,10 @@
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import { AppBar, Box, Toolbar, Typography } from '@mui/material';
+import { ProjectTitle } from './ProjectTitle';
 
 export const TopBar = () => {
+  let isInEditor = true; // TODO get this info from router
+
   return (
     <AppBar
       position="fixed"
@@ -22,9 +25,13 @@ export const TopBar = () => {
         >
           <AccountTreeIcon fontSize="medium" />
         </Box>
-        <Typography variant="h6" noWrap component="div">
-          DCR Graph Editor
-        </Typography>
+        {isInEditor ? (
+          <ProjectTitle />
+        ) : (
+          <Typography variant="h6" noWrap component="div">
+            DCR Graph Editor
+          </Typography>
+        )}
       </Toolbar>
     </AppBar>
   );
