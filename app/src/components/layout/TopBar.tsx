@@ -4,7 +4,8 @@ import { AppBar, Box, Toolbar, Typography } from '@mui/material';
 export const TopBar = () => {
   return (
     <AppBar
-      position="fixed"
+      position="relative"
+      elevation={1}
       sx={(theme) => ({
         zIndex: theme.zIndex.drawer + 1,
       })}
