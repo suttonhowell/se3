@@ -4,13 +4,11 @@ import { Routes, useLocation } from 'react-router-dom';
 import { ProjectTitle } from './ProjectTitle';
 
 export const TopBar = () => {
-  let isInEditor = true; // TODO get this info from router
   var location = useLocation()
 
   return (
     <AppBar
-      position="relative"
-      elevation={1}
+      position="fixed"
       sx={(theme) => ({
         zIndex: theme.zIndex.drawer + 1,
       })}

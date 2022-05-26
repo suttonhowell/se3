@@ -1,5 +1,6 @@
 import { Edit, SaveAsRounded } from '@mui/icons-material';
 import { Box, IconButton, TextField, Typography } from '@mui/material';
+import { lineHeight } from '@mui/system';
 import React, { useState } from 'react';
 
 export const ProjectTitle = () => {
@@ -39,7 +40,7 @@ export const ProjectTitle = () => {
             size="small"
             onChange={() => setIsTitleEditable(() => true)}
             onKeyDown={handleKeyDownInTitle}
-            sx={{ color: 'white' }}
+            sx={{ input: { color: 'white' } }}
           />
           <IconButton>
             <SaveAsRounded onClick={() => updateTitleorErrorMsg()} />
@@ -47,12 +48,13 @@ export const ProjectTitle = () => {
         </Box>
       ) : (
         <Box sx={{ display: 'flex' }}>
-          <Typography> {title} </Typography>
+          <Typography sx={{ lineHeight: 3 }}> {title} </Typography>
           <IconButton>
             <Edit onClick={() => setIsTitleEditable(() => true)} />
           </IconButton>
         </Box>
-      )}
-    </Box>
+      )
+      }
+    </Box >
   );
 };
