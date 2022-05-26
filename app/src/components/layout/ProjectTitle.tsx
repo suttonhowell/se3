@@ -35,9 +35,11 @@ export const ProjectTitle = () => {
             error={isError}
             helperText={isError ? 'Please enter a title with less than 20 characters' : ''}
             defaultValue={title}
-            variant="standard"
+            variant="outlined"
+            size="small"
             onChange={() => setIsTitleEditable(() => true)}
             onKeyDown={handleKeyDownInTitle}
+            sx={{ color: 'white' }}
           />
           <IconButton>
             <SaveAsRounded onClick={() => updateTitleorErrorMsg()} />

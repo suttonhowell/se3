@@ -1,9 +1,11 @@
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import { AppBar, Box, Toolbar, Typography } from '@mui/material';
+import { Routes, useLocation } from 'react-router-dom';
 import { ProjectTitle } from './ProjectTitle';
 
 export const TopBar = () => {
   let isInEditor = true; // TODO get this info from router
+  var location = useLocation()
 
   return (
     <AppBar
@@ -25,7 +27,7 @@ export const TopBar = () => {
         >
           <AccountTreeIcon fontSize="medium" />
         </Box>
-        {isInEditor ? (
+        {(location.pathname.includes("editor")) ? (
           <ProjectTitle />
         ) : (
           <Typography variant="h6" noWrap component="div">
