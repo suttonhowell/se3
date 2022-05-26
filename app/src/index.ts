@@ -155,7 +155,9 @@ app.on('activate', () => {
 
 // Install devtools
 app.whenReady().then(() => {
-  installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
+  installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS], {
+    loadExtensionOptions: { allowFileAccess: true },
+  })
     .then((name) => console.log(`Added Extension:  ${name}`))
     .catch((err) => console.log('An error occurred: ', err));
 });
