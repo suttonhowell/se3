@@ -50,76 +50,78 @@ const createWindow = (): void => {
     nativeTheme.themeSource = 'system';
   });
 
-
-  // submenu: [
-  //   {label:'Adjust Notification Value'},
-  //   {label:'CoinMarketCap'},
-  //   {
-  //       label:'Exit', 
-  //       click() { 
-  //           app.quit() 
-  //       } 
-  //   }
-  
   var menu = Menu.buildFromTemplate([
-    { label: 'File',
+    {
+      label: 'File',
       submenu: [
-        { label: 'Open', 
-          click() { 
-            console.log("Open was clicked\n"); 
-          } 
+        {
+          label: 'Open',
+          click() {
+            console.log("Open was clicked\n");
+          }
         },//end of Open
-        { label: 'Save',
-          click() { 
-            console.log("Save was clicked\n"); 
-          } 
+        {
+          label: 'Save',
+          click() {
+            console.log("Save was clicked\n");
+          }
         },//end of Save 
-        { label: 'Exit',
-          click() { 
-              console.log("Exit was clicked\nExiting...\n");
-              app.quit() 
-          } 
+        {
+          label: 'Exit',
+          click() {
+            console.log("Exit was clicked\nExiting...\n");
+            app.quit()
+          }
         }//end of Exit
       ],
     },//end of File submenu
-    { label: 'Edit',
+    {
+      label: 'Edit',
       submenu: [
-        { label: 'Undo',
-          click() { 
-            console.log("Undo was clicked\n"); 
+        {
+          label: 'Undo',
+          click() {
+            console.log("Undo was clicked\n");
           }
         },//end of Undo 
-        { label: 'Redo',
-          click() { 
-            console.log("Redo was clicked\n"); 
+        {
+          label: 'Redo',
+          click() {
+            console.log("Redo was clicked\n");
           }
         }//end of Redo
       ],
     },//end of Edit submenu
-    { label: 'Format',
+    {
+      label: 'Format',
       submenu: [
-        { label: 'Option 1', 
-          click() { 
-            console.log("Option 1 (Format) was clicked\n"); 
+        {
+          label: 'Option 1',
+          click() {
+            console.log("Option 1 (Format) was clicked\n");
           }
         },//end of Option 1
-        { label: 'Option 2',
-          click() { 
-            console.log("Option 2 (Format) was clicked\n"); 
+        {
+          label: 'Option 2',
+          click() {
+            console.log("Option 2 (Format) was clicked\n");
           }
         }//end of Option 2
       ],
     },//end of Format submenu
-    { label: 'Settings',
+    {
+      label: 'Settings',
       submenu: [
-        { label: 'Option 1',
-          click() { 
-            console.log("Option 1 (Settings) was clicked\n"); 
-          } 
+        {
+          label: 'Option 1',
+          click() {
+            console.log("Option 1 (Settings) was clicked\n");
+          }
         },//end of Option 1
-        { label: 'Option 2',
-          click() { 
-            console.log("Option 2 (Settings) was clicked\n"); 
+        {
+          label: 'Option 2',
+          click() {
+            console.log("Option 2 (Settings) was clicked\n");
           }
         }//end of Option 2
       ],
