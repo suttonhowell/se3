@@ -6,7 +6,7 @@ interface ActivityProps extends ActivityType {}
 
 export const Activity = (props: ActivityProps) => {
   const dispatch = useAppDispatch();
-  const { selectedElement } = useAppSelector((state) => state.editor);
+  const { selectedElementAid } = useAppSelector((state) => state.editor);
   const height = 150;
   const width = 100;
   const headerHeight = 30;
@@ -30,7 +30,7 @@ export const Activity = (props: ActivityProps) => {
         ry="10"
         width={width}
         height={height}
-        stroke={selectedElement === props.aid ? 'blue' : props.style.borderColor}
+        stroke={selectedElementAid === props.aid ? 'blue' : props.style.borderColor}
         fill={props.style.bgColor}
       />
       <path

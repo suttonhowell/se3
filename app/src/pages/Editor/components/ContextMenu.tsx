@@ -9,31 +9,52 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ColorPicker } from '../../../components/inputFields/ColorPicker';
+import { isActivity } from '../../../core/models/DCRGraph';
 import { changeActivityLabel } from '../../../core/redux/features/editor/editorSlice';
 import { useAppDispatch, useAppSelector } from '../../../core/redux/hooks';
 
 export const ContextMenu = () => {
-  const { selectedElement, activities } = useAppSelector((state) => ({
+  const { selectedElement } = useAppSelector((state) => ({
     selectedElement: state.editor.selectedElement,
-    activities: state.editor.graph.activities,
   }));
   const dispatch = useAppDispatch();
   const [isLabelEditable, setIsLabelEditable] = useState(false);
   const [label, setLabel] = useState('');
+  const [colors, setColors] = useState({
+    borderColor: 'black',
+    bgColor: 'white',
+    textColor: 'black',
+  });
+  const labelInputRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (selectedElement) {
-      setLabel(activities.find((a) => a.aid === selectedElement)?.label || '');
+    if (isActivity(selectedElement)) {
+      setLabel(selectedElement.label);
     }
   }, [selectedElement]);
 
-  const handleOnClick = () => {
-    if (isLabelEditable) {
-      dispatch(changeActivityLabel({ label, aid: selectedElement || '' }));
+  // Set focus on the activity label input when its clicked while being disabled
+  useEffect(() => {
+    if (isLabelEditable && labelInputRef.current) {
+      labelInputRef.current.focus();
+    }
+  }, [isLabelEditable]);
+
+  const handleOnSubmit = () => {
+    if (isActivity(selectedElement)) {
+      dispatch(changeActivityLabel({ label, aid: selectedElement.aid || '' }));
       setIsLabelEditable(false);
     } else {
+      setIsLabelEditable(true);
+    }
+  };
+
+  // Make label
+  const handleOnClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault();
+    if (!isLabelEditable) {
       setIsLabelEditable(true);
     }
   };
@@ -43,7 +64,7 @@ export const ContextMenu = () => {
     if (value.length >= 20) return;
     setLabel(value);
   };
-
+  console.log(selectedElement);
   return (
     <Drawer
       anchor="right"
@@ -55,24 +76,33 @@ export const ContextMenu = () => {
         <Toolbar />
         <Toolbar variant="dense" />
         <Typography>Customization</Typography>
-        <TextField
-          size="small"
-          variant="filled"
-          label="Activity name"
-          disabled={!isLabelEditable}
-          fullWidth
-          value={label}
-          onChange={handleOnChange}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={handleOnClick}>
-                  {isLabelEditable ? <SaveIcon /> : <EditIcon />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
+        <Box component="form" onSubmit={handleOnSubmit}>
+          <TextField
+            size="small"
+            variant="outlined"
+            label="Activity name"
+            margin="normal"
+            disabled={!isLabelEditable}
+            fullWidth
+            value={label}
+            onChange={handleOnChange}
+            onClick={handleOnClick}
+            inputProps={{
+              ref: labelInputRef,
+              sx: { cursor: isLabelEditable ? 'text' : 'pointer' },
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleOnSubmit}>
+                    {isLabelEditable ? <SaveIcon /> : <EditIcon />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            sx={{ cursor: 'pointer' }}
+          />
+        </Box>
         <ColorPicker label="Background color" />
         <ColorPicker label="Text color" />
         <ColorPicker label="Border color" />

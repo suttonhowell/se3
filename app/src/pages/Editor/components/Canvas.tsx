@@ -5,11 +5,11 @@ import { Activity } from './Activity';
 
 export const Canvas = () => {
   const dispatch = useAppDispatch();
-  const { graph, selectedElement } = useAppSelector((state) => state.editor);
+  const { graph, selectedElementAid } = useAppSelector((state) => state.editor);
   const [canvasRef, startDrag, drag, endDrag] = useDragSVGElement();
 
   const handleDeselectElement = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
-    if (selectedElement && (e.target as SVGElement).id == 'canvas') {
+    if (selectedElementAid && (e.target as SVGElement).id == 'canvas') {
       dispatch(selectElement(null));
     }
   };

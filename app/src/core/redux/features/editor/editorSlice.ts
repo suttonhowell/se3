@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
-import { Aid, DCRGraph, Position } from '../../../models/DCRGraph';
+import { Activity, Aid, DCRGraph, Position, Relation } from '../../../models/DCRGraph';
 
 interface EditorState {
   graph: DCRGraph;
-  selectedElement: Aid | null;
+  selectedElementAid: Aid | null;
+  selectedElement: Activity | Relation | null;
   offset: Position | null;
 }
 
@@ -15,6 +16,7 @@ const initialState: EditorState = {
       name: 'Untitled.dcr',
     },
   },
+  selectedElementAid: null,
   selectedElement: null,
   offset: null,
 };
@@ -47,11 +49,20 @@ export const editorSlice = createSlice({
           textColor: 'black',
         },
         relations: [],
+        parrent: null,
         nestedActivities: [],
       });
     },
     selectElement: (state, action: PayloadAction<Aid | null>) => {
-      state.selectedElement = action.payload;
+      const aid = action.payload;
+      if (!aid) {
+        state.selectedElementAid = null;
+        state.selectedElement = null;
+      } else {
+        state.selectedElementAid = aid;
+        state.selectedElement =
+          state.graph.activities.find((a) => a.aid === action.payload) || null;
+      }
     },
     setOffset: (state, action: PayloadAction<Position | null>) => {
       state.offset = action.payload;
