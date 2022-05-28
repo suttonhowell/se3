@@ -74,7 +74,14 @@ export const TopToolbar = () => {
 
   return (
     <>
-      <AppBar position="relative" color="inherit" elevation={4}>
+      <AppBar
+        position="relative"
+        color="inherit"
+        elevation={4}
+        sx={(theme) => ({
+          zIndex: theme.zIndex.drawer + 1,
+        })}
+      >
         <Toolbar disableGutters variant="dense" sx={{ minHeight: 'unset', py: 0.5 }}>
           {menuItemButtonGroups.map((buttonGroup, idx) => (
             <Fragment key={'btnGrp' + idx}>
