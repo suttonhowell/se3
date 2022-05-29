@@ -44,6 +44,7 @@ export const Activity = (props: ActivityProps) => {
         y={headerHeight + (height - headerHeight) / 2}
         pointerEvents="none"
         stroke="none"
+        fill={props.style.textColor}
       >
         {props.label}
       </text>

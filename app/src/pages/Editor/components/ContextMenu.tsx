@@ -3,30 +3,30 @@ import SaveIcon from '@mui/icons-material/SaveAsRounded';
 import {
   Box,
   Drawer,
+  FormControlLabel,
   IconButton,
   InputAdornment,
+  Switch,
   TextField,
   Toolbar,
   Typography,
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { ColorPicker } from '../../../components/inputFields/ColorPicker';
-import { isActivity } from '../../../core/models/DCRGraph';
-import { changeActivityLabel } from '../../../core/redux/features/editor/editorSlice';
+import { ActivityStyle, Aid, isActivity, Markings } from '../../../core/models/DCRGraph';
+import {
+  changeActivityLabel,
+  changeMarking,
+  changeStyle,
+} from '../../../core/redux/features/editor/editorSlice';
 import { useAppDispatch, useAppSelector } from '../../../core/redux/hooks';
 
 export const ContextMenu = () => {
-  const { selectedElement } = useAppSelector((state) => ({
-    selectedElement: state.editor.selectedElement,
-  }));
+  const selectedElement = useAppSelector((state) => state.editor.selectedElement);
   const dispatch = useAppDispatch();
   const [isLabelEditable, setIsLabelEditable] = useState(false);
   const [label, setLabel] = useState('');
-  const [colors, setColors] = useState({
-    borderColor: 'black',
-    bgColor: 'white',
-    textColor: 'black',
-  });
+
   const labelInputRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -51,7 +51,9 @@ export const ContextMenu = () => {
     }
   };
 
-  // Make label
+  const handleOnSubmitColor = (styleProp: keyof ActivityStyle, aid: Aid) => (color: string) =>
+    dispatch(changeStyle({ styleProp, color, aid }));
+
   const handleOnClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
     if (!isLabelEditable) {
@@ -59,12 +61,21 @@ export const ContextMenu = () => {
     }
   };
 
+  const handleChangeMarking = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    markingsProp: keyof Markings,
+    aid: Aid
+  ) => {
+    const value = e.target.checked;
+    dispatch(changeMarking({ markingsProp, value, aid }));
+  };
+
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value.length >= 20) return;
     setLabel(value);
   };
-  console.log(selectedElement);
+
   return (
     <Drawer
       anchor="right"
@@ -75,37 +86,68 @@ export const ContextMenu = () => {
       <Box sx={{ width: 300, p: 2 }}>
         <Toolbar />
         <Toolbar variant="dense" />
-        <Typography>Customization</Typography>
-        <Box component="form" onSubmit={handleOnSubmit}>
-          <TextField
-            size="small"
-            variant="outlined"
-            label="Activity name"
-            margin="normal"
-            disabled={!isLabelEditable}
-            fullWidth
-            value={label}
-            onChange={handleOnChange}
-            onClick={handleOnClick}
-            inputProps={{
-              ref: labelInputRef,
-              sx: { cursor: isLabelEditable ? 'text' : 'pointer' },
-            }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={handleOnSubmit}>
-                    {isLabelEditable ? <SaveIcon /> : <EditIcon />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            sx={{ cursor: 'pointer' }}
-          />
-        </Box>
-        <ColorPicker label="Background color" />
-        <ColorPicker label="Text color" />
-        <ColorPicker label="Border color" />
+        {isActivity(selectedElement) ? (
+          <>
+            <Typography>Customization</Typography>
+            <Box component="form" onSubmit={handleOnSubmit}>
+              <TextField
+                size="small"
+                variant="outlined"
+                label="Activity name"
+                margin="normal"
+                disabled={!isLabelEditable}
+                fullWidth
+                value={label}
+                onChange={handleOnChange}
+                onClick={handleOnClick}
+                inputProps={{
+                  ref: labelInputRef,
+                  sx: { cursor: isLabelEditable ? 'text' : 'pointer' },
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleOnSubmit}>
+                        {isLabelEditable ? <SaveIcon /> : <EditIcon />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{ cursor: 'pointer' }}
+              />
+            </Box>
+            {Object.keys(selectedElement.markings).map((key, index) => {
+              const markingProp = key as keyof Markings;
+              return (
+                <FormControlLabel
+                  key={key}
+                  control={
+                    <Switch
+                      checked={selectedElement.markings[markingProp]}
+                      onChange={(e) => handleChangeMarking(e, markingProp, selectedElement.aid)}
+                    />
+                  }
+                  label={key.charAt(0).toUpperCase() + key.slice(1)}
+                />
+              );
+            })}
+            <ColorPicker
+              label="Background color"
+              value={selectedElement.style.bgColor}
+              onDispatch={handleOnSubmitColor('bgColor', selectedElement.aid)}
+            />
+            <ColorPicker
+              label="Text color"
+              value={selectedElement.style.textColor}
+              onDispatch={handleOnSubmitColor('textColor', selectedElement.aid)}
+            />
+            <ColorPicker
+              label="Border color"
+              value={selectedElement.style.borderColor}
+              onDispatch={handleOnSubmitColor('borderColor', selectedElement.aid)}
+            />
+          </>
+        ) : null}
       </Box>
     </Drawer>
   );
