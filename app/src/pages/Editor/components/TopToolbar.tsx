@@ -11,6 +11,9 @@ import { Box } from '@mui/system';
 import React, { Fragment, useState } from 'react';
 import { ButtonDropDown, DropDownItemProps } from '../../../components/navigation/ButtonDropDown';
 import { useIterNumberArray } from '../../../core/hooks/useIterArray';
+import { useAppDispatch } from '../../../core/redux/hooks';
+import { deleteActivity } from '../../../core/redux/features/editor/editorSlice';
+import { useSelector } from 'react-redux';
 
 type MenuState = {
   hasHistory: boolean;
@@ -29,6 +32,7 @@ export const TopToolbar = () => {
     zoomLevel: 100,
   });
   const [predecessor, successor] = useIterNumberArray(zoomLevelsIncrements, 100);
+  const dispatch = useAppDispatch();
 
   const handleOnClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const { name } = e.currentTarget;
@@ -54,10 +58,11 @@ export const TopToolbar = () => {
         }));
         break;
       case 'delete':
-        setMenuState((prevState) => ({
-          ...prevState,
-          hasSelected: !prevState.hasSelected,
-        }));
+        dispatch(deleteActivity());
+        // setMenuState((prevState) => ({
+        //   ...prevState,
+        //   hasSelected: false,
+        // }));
         break;
       default:
         break;

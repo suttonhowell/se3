@@ -53,6 +53,25 @@ export const editorSlice = createSlice({
         nestedActivities: [],
       });
     },
+    deleteActivity: (state) => {
+      const selectedElement = state.selectedElement;
+      
+      if (selectedElement === null) {
+        console.log('User initiated delete without selecting an element');
+        return;
+      }
+
+      const index = state.graph?.activies.findIndex(
+        (activity) => activity.aid === selectedElement
+      );
+
+      if (index === undefined) {
+        console.log('User selected element that does not exist');
+        return;
+      }
+
+      state.graph?.activies.splice(index, 1);
+    },
     selectElement: (state, action: PayloadAction<Aid | null>) => {
       state.selectedElement = action.payload;
     },
@@ -77,7 +96,7 @@ export const editorSlice = createSlice({
   },
 });
 
-export const { createNewGraph, addActivity, selectElement, setOffset, changeTitle, moveActivity } =
+export const { createNewGraph, addActivity, deleteActivity, selectElement, setOffset, changeTitle, moveActivity } =
   editorSlice.actions;
 
 export default editorSlice.reducer;
