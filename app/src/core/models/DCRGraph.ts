@@ -6,20 +6,24 @@ export interface DCRGraph {
   };
 }
 
+export interface ActivityStyle {
+  borderColor: string;
+  textColor: string;
+  bgColor: string;
+}
+
+export interface Markings {
+  pending: boolean;
+  included: boolean;
+  executed: boolean;
+}
+
 export interface Activity {
   aid: Aid;
   label: string;
   position: Position;
-  markings: {
-    pending: boolean;
-    included: boolean;
-    executed: boolean;
-  };
-  style: {
-    borderColor: string;
-    textColor: string;
-    bgColor: string;
-  };
+  markings: Markings;
+  style: ActivityStyle;
   relations: Relation[];
   parrent: Aid | null;
   nestedActivities: Activity[];
