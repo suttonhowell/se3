@@ -1,6 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
-import { Activity, Aid, DCRGraph, Position, Relation } from '../../../models/DCRGraph';
+import {
+  Activity,
+  ActivityStyle,
+  Aid,
+  DCRGraph,
+  isActivity,
+  Markings,
+  Position,
+  Relation,
+} from '../../../models/DCRGraph';
 
 interface EditorState {
   graph: DCRGraph;
@@ -71,15 +80,14 @@ export const editorSlice = createSlice({
       state.graph.metaData.name = action.payload;
     },
     changeActivityLabel: (state, action: PayloadAction<{ label: string; aid: string | null }>) => {
-      if (action.payload.aid) {
+      const { label, aid } = action.payload;
+      if (isActivity(state.selectedElement)) {
+        state.selectedElement = { ...state.selectedElement, label };
         const updatedActivities = state.graph.activities.map((activity) =>
-          activity.aid === action.payload.aid
-            ? { ...activity, label: action.payload.label }
-            : activity
+          activity.aid !== aid ? activity : { ...activity, label }
         );
         state.graph.activities = updatedActivities;
       }
-      return state;
     },
     moveActivity: (state, action: PayloadAction<{ aid: Aid; position: Position }>) => {
       const updatedActivities = state.graph.activities.map((activity) =>
@@ -88,6 +96,42 @@ export const editorSlice = createSlice({
           : { ...activity, position: action.payload.position }
       );
       state.graph.activities = updatedActivities;
+    },
+    changeStyle: (
+      state,
+      action: PayloadAction<{ styleProp: keyof ActivityStyle; color: string; aid: Aid }>
+    ) => {
+      const { styleProp, color, aid } = action.payload;
+      if (isActivity(state.selectedElement)) {
+        state.selectedElement = {
+          ...state.selectedElement,
+          style: { ...state.selectedElement.style, [styleProp]: color },
+        };
+        const updatedActivities = state.graph.activities.map((activity) =>
+          activity.aid !== aid
+            ? activity
+            : { ...activity, style: { ...activity.style, [styleProp]: color } }
+        );
+        state.graph.activities = updatedActivities;
+      }
+    },
+    changeMarking: (
+      state,
+      action: PayloadAction<{ markingsProp: keyof Markings; value: boolean; aid: Aid }>
+    ) => {
+      const { markingsProp, value, aid } = action.payload;
+      if (isActivity(state.selectedElement)) {
+        state.selectedElement = {
+          ...state.selectedElement,
+          markings: { ...state.selectedElement.markings, [markingsProp]: value },
+        };
+        const updatedActivities = state.graph.activities.map((activity) =>
+          activity.aid !== aid
+            ? activity
+            : { ...activity, markings: { ...activity.markings, [markingsProp]: value } }
+        );
+        state.graph.activities = updatedActivities;
+      }
     },
   },
 });
@@ -100,6 +144,8 @@ export const {
   changeTitle,
   moveActivity,
   changeActivityLabel,
+  changeMarking,
+  changeStyle,
 } = editorSlice.actions;
 
 export default editorSlice.reducer;
