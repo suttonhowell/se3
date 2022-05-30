@@ -9,8 +9,10 @@ import {
 import { AppBar, Divider, IconButton, Toolbar, Tooltip } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { Fragment, useState } from 'react';
+import { store } from '../../../core/redux/store';
 import { ButtonDropDown, DropDownItemProps } from '../../../components/navigation/ButtonDropDown';
 import { useIterNumberArray } from '../../../core/hooks/useIterArray';
+import { saveGraph } from '../../../core/utils/graphUtils'
 
 type MenuState = {
   hasHistory: boolean;
@@ -52,6 +54,8 @@ export const TopToolbar = () => {
           ...prevState,
           zoomLevel: predecessor(prevState.zoomLevel),
         }));
+        const graph = store.getState().editor.graph
+        if (graph !== undefined) saveGraph(graph)
         break;
       case 'delete':
         setMenuState((prevState) => ({
