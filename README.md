@@ -60,4 +60,4 @@ These instructions describe how to set up the project for local development.
 - [MUI documentation](https://mui.com/material-ui/getting-started/installation/)
 - [Electron documentation](https://www.electronjs.org/docs/latest)
 - [Tutorial on drag-and-drop SVG's](https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/)
-- [Commit Message Etiquette](https://cbea.ms/git-commit/e)
+- [Commit Message Etiquette](https://cbea.ms/git-commit/)
