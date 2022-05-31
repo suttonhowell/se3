@@ -24,7 +24,7 @@ export interface Activity {
 }
 
 // TODO check that Aids are not the same when a new one is created
-export const initialActivity: Activity = {
+export const initialActivity = (): Activity => ({
   aid: uuidv4(),
   label: 'Activity',
   position: { x: 100, y: 100 },
@@ -40,4 +40,4 @@ export const initialActivity: Activity = {
   },
   relations: [],
   nestedActivities: [],
-};
+});

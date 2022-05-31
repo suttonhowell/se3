@@ -21,7 +21,7 @@ export const editorSlice = createSlice({
       state.graph = initialDCRGraph;
     },
     addActivity: (state) => {
-      state.graph?.activies.push(initialActivity);
+      state.graph.activies.push(initialActivity());
     },
     selectElement: (state, action: PayloadAction<Aid | null>) => {
       state.selectedElement = action.payload;
