@@ -8,11 +8,6 @@ export const ContextMenu = () => {
     activies: state.editor.graph?.activies,
   }));
 
-  if (activies && selectedElement) {
-    const activity = activies.find((a) => a.aid === selectedElement);
-    console.log(activity);
-  }
-
   return (
     <Drawer
       anchor="right"
