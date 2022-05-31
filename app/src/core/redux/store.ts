@@ -1,10 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import AppSettingsSlice from './features/AppSettings';
 import EditorReducer from './features/editor/editorSlice';
 
 export const store = configureStore({
   reducer: {
-    appSettings: AppSettingsSlice,
     editor: EditorReducer,
   },
 });
