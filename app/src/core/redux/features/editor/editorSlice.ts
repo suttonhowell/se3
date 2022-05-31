@@ -3,16 +3,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { Aid, DCRGraph, Position } from '../../../models/DCRGraph';
 
 interface EditorState {
-  graph?: DCRGraph;
+  graph: DCRGraph;
   selectedElement: Aid | null;
   offset: Position | null;
 }
 
 const initialState: EditorState = {
-  graph:
-    process.env.NODE_ENV === 'production'
-      ? undefined
-      : {
+  graph: {
           activies: [],
           metaData: {
             name: 'Untitled.dcr',
@@ -61,7 +58,7 @@ export const editorSlice = createSlice({
         return;
       }
 
-      const index = state.graph?.activies.findIndex(
+      const index = state.graph.activies.findIndex(
         (activity) => activity.aid === selectedElement
       );
 
@@ -70,7 +67,8 @@ export const editorSlice = createSlice({
         return;
       }
 
-      state.graph?.activies.splice(index, 1);
+      state.graph.activies.splice(index, 1);
+      state.selectedElement = null;
     },
     selectElement: (state, action: PayloadAction<Aid | null>) => {
       state.selectedElement = action.payload;
