@@ -1,31 +1,35 @@
-import { Activity as ActivityType } from '../../../core/models/DCRGraph';
-import { selectElement } from '../../../core/redux/features/editor/editorSlice';
-import { useAppDispatch, useAppSelector } from '../../../core/redux/hooks';
+import { Box } from '@mui/system';
+import { Activity as ActivityType } from '../../../core/models';
+import { ToolType } from '../../../core/redux/features/editor/editorSlice';
+import { useAppSelector } from '../../../core/redux/hooks';
+import { RelationToSelf } from './RelationToSelf';
 
 interface ActivityProps extends ActivityType {}
 
 export const Activity = (props: ActivityProps) => {
-  const dispatch = useAppDispatch();
-  const { selectedElement } = useAppSelector((state) => state.editor);
+  const { selectedElement, isAddingRelation, addRelationArgs } = useAppSelector((state) => ({
+    selectedElement: state.editor.selectedElement,
+    isAddingRelation: state.editor.usingTool === ToolType.AddRelation,
+    addRelationArgs: state.editor.addRelationArgs,
+  }));
   const height = 150;
   const width = 100;
   const headerHeight = 30;
   const strokeWidth = 5;
 
-  const handleSelectElement = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
-    dispatch(selectElement(props.aid));
-  };
-
   return (
-    <g
-      id={props.aid}
-      strokeWidth={strokeWidth}
-      transform={`translate(${props.position.x},${props.position.y})`}
-    >
-      <rect
-        className="draggable"
-        onMouseDown={handleSelectElement}
-        style={{ cursor: 'move' }}
+    <g strokeWidth={strokeWidth} transform={`translate(${props.position.x},${props.position.y})`}>
+      <Box
+        component="rect"
+        id={props.aid}
+        className="draggable activity"
+        sx={{
+          cursor: isAddingRelation ? 'copy' : 'move',
+          stroke: addRelationArgs === props.aid ? 'green' : undefined,
+          '&:hover': {
+            stroke: !isAddingRelation ? undefined : !addRelationArgs ? 'green' : 'red',
+          },
+        }}
         rx="10"
         ry="10"
         width={width}
@@ -36,6 +40,7 @@ export const Activity = (props: ActivityProps) => {
       <path
         d={`M ${strokeWidth / 2} ${headerHeight} H ${width - strokeWidth / 2}`}
         stroke="black"
+        pointerEvents="none"
       />
       <text
         alignmentBaseline="middle"
@@ -44,9 +49,13 @@ export const Activity = (props: ActivityProps) => {
         y={headerHeight + (height - headerHeight) / 2}
         pointerEvents="none"
         stroke="none"
+        style={{ userSelect: 'none' }}
       >
         {props.label}
       </text>
+      {props.relations.map((r, idx) => (
+        <RelationToSelf key={r.rid} startPoint={{ x: 20 * idx, y: -strokeWidth / 2 }} />
+      ))}
     </g>
   );
 };
