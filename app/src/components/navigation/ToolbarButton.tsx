@@ -1,4 +1,4 @@
-import { IconButton, Tooltip } from '@mui/material';
+import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 import { FC } from 'react';
 
 interface ToolBarButtonProps {
@@ -6,14 +6,21 @@ interface ToolBarButtonProps {
   disabledCondition?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   children: JSX.Element;
+  iconButtonProps?: Omit<IconButtonProps, 'disabled' | 'onClick'>;
 }
 
 export const ToolbarButton: FC<ToolBarButtonProps> = (props) => {
   return (
     <Tooltip title={props.tooltipTitle} arrow disableInteractive>
-      <IconButton disabled={props.disabledCondition} onClick={props.onClick}>
-        {props.children}
-      </IconButton>
+      <span>
+        <IconButton
+          disabled={props.disabledCondition}
+          onClick={props.onClick}
+          {...props.iconButtonProps}
+        >
+          {props.children}
+        </IconButton>
+      </span>
     </Tooltip>
   );
 };
