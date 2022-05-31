@@ -10,7 +10,6 @@ export const ContextMenu = () => {
 
   if (activies && selectedElement) {
     const activity = activies.find((a) => a.aid === selectedElement);
-    console.log(activity);
   }
 
   return (
