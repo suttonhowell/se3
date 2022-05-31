@@ -37,5 +37,6 @@ These instructions describe how to set up the project for local development.
 
 ### Add relation
 
-- [ ] Add relation type picker popper when the "add relation" tool is active.
+- [ ] Add relation type picker popper when the "add relation" tool is active + a deactive floating action button.
 - [ ] Add edit relation to context menu.
+- [ ] Consider to a way to make it more visual when the "add relation tool" is active, either by changing the mouse on the canvas or a snackbar when clicking the canvas when using the tool, or deslecting the when the canvas is clicked.
