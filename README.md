@@ -27,3 +27,15 @@ These instructions describe how to set up the project for local development.
 - [Electron documentation](https://www.electronjs.org/docs/latest)
 - [Tutorial on drag-and-drop SVG's](https://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/)
 - [SVG dynamic wordwrapping](https://medium.com/@CarysMills/wrapping-svg-text-without-svg-2-ecbfb58f7ba4)
+
+## Todo list
+
+### General
+
+- [ ] Move constants to the constants file.
+- [ ] Add hot keys to the app bar.
+
+### Add relation
+
+- [ ] Add relation type picker popper when the "add relation" tool is active.
+- [ ] Add edit relation to context menu.
