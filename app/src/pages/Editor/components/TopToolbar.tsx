@@ -13,6 +13,8 @@ import { ButtonDropDown, DropDownItemProps } from '../../../components/navigatio
 import { ToolbarButton } from '../../../components/navigation/ToolbarButton';
 import { ToolbarButtonGroup } from '../../../components/navigation/ToolbarButtonGroup';
 import { useIterNumberArray } from '../../../core/hooks/useIterArray';
+import { pickTool, ToolType } from '../../../core/redux/features/editor/editorSlice';
+import { useAppDispatch, useAppSelector } from '../../../core/redux/hooks';
 
 // Increments used for zoom in and out
 const zoomLevelsIncrements = [
@@ -29,10 +31,13 @@ const zoomItemList: DropDownItemProps[] = zoomList.map((item) => ({
 }));
 
 export const TopToolbar = () => {
+  const dispatch = useAppDispatch();
+  const isRelationToolActive = useAppSelector(
+    (state) => state.editor.usingTool === ToolType.AddRelation
+  );
   const [hasHistory, setHasHistory] = useState(false);
   const [hasSelected, setHasSelected] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(100);
-  const [isRelationToolActive, setIsRelationToolActive] = useState(false);
   const [predecessor, successor] = useIterNumberArray(zoomLevelsIncrements, 100);
 
   const handleOnClickUndo = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -60,7 +65,9 @@ export const TopToolbar = () => {
   };
 
   const handleOnClickRelationTool = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    setIsRelationToolActive((prevState) => !prevState);
+    isRelationToolActive
+      ? dispatch(pickTool(ToolType.None))
+      : dispatch(pickTool(ToolType.AddRelation));
   };
 
   const handleOnZoomLevelClick = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
@@ -125,7 +132,7 @@ export const TopToolbar = () => {
             tooltipTitle={
               (isRelationToolActive ? 'Deactivate' : 'Activate') + '"Add relation tool"'
             }
-            disabledCondition={isRelationToolActive}
+            iconButtonProps={{ color: isRelationToolActive ? 'primary' : 'default' }}
             // TODO: Find a better suited icon for this button
             children={<RelationToolIcon />}
             onClick={handleOnClickRelationTool}
