@@ -10,11 +10,11 @@ interface EditorState {
 
 const initialState: EditorState = {
   graph: {
-          activies: [],
-          metaData: {
-            name: 'Untitled.dcr',
-          },
-        },
+    activities: [],
+    metaData: {
+      name: 'Untitled.dcr',
+    },
+  },
   selectedElement: null,
   offset: null,
 };
@@ -25,14 +25,14 @@ export const editorSlice = createSlice({
   reducers: {
     createNewGraph: (state) => {
       state.graph = {
-        activies: [],
+        activities: [],
         metaData: {
           name: 'Untitled.dcr',
         },
       };
     },
     addActivity: (state) => {
-      state.graph?.activies.push({
+      state.graph?.activities.push({
         aid: uuidv4(),
         label: 'Activity',
         position: { x: 100, y: 100 },
@@ -52,22 +52,10 @@ export const editorSlice = createSlice({
     },
     deleteActivity: (state) => {
       const selectedElement = state.selectedElement;
-      
-      if (selectedElement === null) {
-        console.log('User initiated delete without selecting an element');
-        return;
-      }
-
-      const index = state.graph.activies.findIndex(
-        (activity) => activity.aid === selectedElement
+      if (selectedElement === null) return;
+      state.graph.activities = state.graph.activities.filter(
+        (activity) => activity.aid !== selectedElement
       );
-
-      if (index === undefined) {
-        console.log('User selected element that does not exist');
-        return;
-      }
-
-      state.graph.activies.splice(index, 1);
       state.selectedElement = null;
     },
     selectElement: (state, action: PayloadAction<Aid | null>) => {
@@ -83,18 +71,25 @@ export const editorSlice = createSlice({
     },
     moveActivity: (state, action: PayloadAction<{ aid: Aid; position: Position }>) => {
       if (state.graph) {
-        const updatedActivities = state.graph.activies.map((activity) =>
+        const updatedActivities = state.graph.activities.map((activity) =>
           activity.aid !== action.payload.aid
             ? activity
             : { ...activity, position: action.payload.position }
         );
-        state.graph.activies = updatedActivities;
+        state.graph.activities = updatedActivities;
       }
     },
   },
 });
 
-export const { createNewGraph, addActivity, deleteActivity, selectElement, setOffset, changeTitle, moveActivity } =
-  editorSlice.actions;
+export const {
+  createNewGraph,
+  addActivity,
+  deleteActivity,
+  selectElement,
+  setOffset,
+  changeTitle,
+  moveActivity,
+} = editorSlice.actions;
 
 export default editorSlice.reducer;
