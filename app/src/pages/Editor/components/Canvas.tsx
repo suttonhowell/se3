@@ -6,7 +6,6 @@ import {
 } from '../../../core/redux/features/editor/editorSlice';
 import { useAppDispatch, useAppSelector } from '../../../core/redux/hooks';
 import { Activity } from './Activity';
-import { Relation } from './Relation';
 
 export const Canvas = () => {
   const dispatch = useAppDispatch();
@@ -59,7 +58,6 @@ export const Canvas = () => {
       }}
     >
       {graph && graph.activies.map((activity) => <Activity key={activity.aid} {...activity} />)}
-      <Relation />
       {/* <ArrowHead position={{ x: 100, y: 100 }} rotateDeg={90} color="#FFF" /> */}
     </svg>
   );
