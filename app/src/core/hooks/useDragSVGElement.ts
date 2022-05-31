@@ -20,9 +20,9 @@ const getTranslateXY = (target: SVGElement) => {
   var matrixValues = transfromMatrix.match(/matrix.*\((.+)\)/);
   if (matrixValues) {
     matrixValues = matrixValues[1].split(', ');
-    return { x: matrixValues[4], y: matrixValues[5] };
+    return { x: parseFloat(matrixValues[4]), y: parseFloat(matrixValues[5]) };
   } else {
-    return { x: '0', y: '0' };
+    return { x: 0, y: 0 };
   }
 };
 
@@ -47,8 +47,8 @@ export const useDragSVGElement = (): UseDragSVGElementHook => {
       const { x: mouseX, y: mouseY } = getRelativeMousePosition(e, canvasRef);
       const { x, y } = getTranslateXY(gElement);
       setOffset({
-        x: mouseX - parseFloat(x || '0'),
-        y: mouseY - parseFloat(y || '0'),
+        x: mouseX - x,
+        y: mouseY - y,
       });
     }
   };
@@ -66,15 +66,16 @@ export const useDragSVGElement = (): UseDragSVGElementHook => {
   };
 
   const endDrag = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
-    if (draggedElement) {
-      const aid = draggedElement.id;
+    if (draggedElement && offset) {
+      const { x: mouseX, y: mouseY } = getRelativeMousePosition(e, canvasRef);
       const { x, y } = getTranslateXY(draggedElement);
-      const position = {
-        x: parseFloat(x || '0'),
-        y: parseFloat(y || '0'),
-      };
+      // True if the activity was moved doing the dragging phase
+      if (x !== mouseX - offset.x && y !== mouseY - offset.y) {
+        const aid = draggedElement.id;
+        const position = { x: x, y: y };
+        dispatch(moveActivity({ aid, position }));
+      }
       setDraggedElement(null);
-      dispatch(moveActivity({ aid, position }));
     }
   };
 
