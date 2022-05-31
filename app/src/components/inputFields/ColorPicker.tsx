@@ -69,10 +69,24 @@ export const ColorPicker = (props: ColorPickerProps) => {
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignContent: 'center' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignContent: 'center',
+        pt: 0.5,
+        pb: 1,
+      }}
+    >
       <Typography>{props.label}</Typography>
       <Box
-        sx={{ bgcolor: rgbaString, borderRadius: '100%', height: 20, width: 20 }}
+        sx={(theme) => ({
+          bgcolor: rgbaString,
+          borderRadius: '100%',
+          height: 20,
+          width: 20,
+          boxShadow: theme.shadows[3],
+        })}
         onClick={handleClick}
       />
       <Popper
