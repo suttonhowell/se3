@@ -32,9 +32,10 @@ const zoomItemList: DropDownItemProps[] = zoomList.map((item) => ({
 
 export const TopToolbar = () => {
   const dispatch = useAppDispatch();
-  const isRelationToolActive = useAppSelector(
-    (state) => state.editor.usingTool === ToolType.AddRelation
-  );
+  const { isRelationToolActive, hasActivities } = useAppSelector((state) => ({
+    isRelationToolActive: state.editor.usingTool === ToolType.AddRelation,
+    hasActivities: state.editor.graph.activies.length > 0,
+  }));
   const [hasHistory, setHasHistory] = useState(false);
   const [hasSelected, setHasSelected] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(100);
@@ -132,6 +133,7 @@ export const TopToolbar = () => {
             tooltipTitle={
               (isRelationToolActive ? 'Deactivate' : 'Activate') + '"Add relation tool"'
             }
+            disabledCondition={!hasActivities}
             iconButtonProps={{ color: isRelationToolActive ? 'primary' : 'default' }}
             // TODO: Find a better suited icon for this button
             children={<RelationToolIcon />}
