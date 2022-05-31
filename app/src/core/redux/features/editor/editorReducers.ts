@@ -17,7 +17,7 @@ export const addRelationReducer = (
     return { ...state, addRelationArgs: null };
   }
   const addRelationArgs = state.addRelationArgs;
-  // No from args has been selected thus the payload is the "from" activity
+  // No "from" args has been selected thus the payload is the "from" activity
   if (!addRelationArgs) {
     return { ...state, addRelationArgs: action.payload };
   }
@@ -34,6 +34,7 @@ export const addRelationReducer = (
     // Is Relation to other
     return {
       ...state,
+      addRelationArgs: null,
       graph: {
         ...state.graph,
         relations: [
