@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, nativeTheme } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, nativeTheme } from 'electron';
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
   REDUX_DEVTOOLS,
@@ -15,6 +15,15 @@ if (require('electron-squirrel-startup')) {
   // eslint-disable-line global-require
   app.quit();
 }
+
+const openFile = async () => {
+  const { canceled, filePaths } = await dialog.showOpenDialog({});
+  if (canceled) {
+    return;
+  } else {
+    return filePaths[0];
+  }
+};
 
 const createWindow = (): void => {
   // Create the browser window.
@@ -49,6 +58,8 @@ const createWindow = (): void => {
   ipcMain.handle('dark-mode:system', () => {
     nativeTheme.themeSource = 'system';
   });
+
+  ipcMain.handle('dialog:openFile', openFile);
 };
 
 // This method will be called when Electron has finished

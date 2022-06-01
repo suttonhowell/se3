@@ -34,6 +34,9 @@ declare global {
       toggle: () => Promise<boolean>;
       system: () => Promise<void>;
     };
+    fileApi: {
+      openFile: () => Promise<string | undefined>;
+    };
   }
 }
 

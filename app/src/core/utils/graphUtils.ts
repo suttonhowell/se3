@@ -1,13 +1,12 @@
-import { app } from "electron";
-import { DCRGraph } from "../models/DCRGraph";
-import fs from "fs"
+import { DCRGraph } from '../models/DCRGraph';
+// import fs from "fs"
+// const fs = window.require('fs');
+// const path = window.require('path');
 
 export function saveGraph(graph: DCRGraph) {
-    let graphJSON = JSON.stringify(graph);
-    let path = app.getPath("documents");
-    fs.writeFile(path, graphJSON, {}, () => { });
+  // let graphJSON = JSON.stringify(graph);
+  // let path = app.getPath('documents');
+  // fs.writeFile(path, graphJSON, {}, () => {});
 }
 
-export function loadGraph(graph: DCRGraph) {
-
-}
+export function loadGraph(graph: DCRGraph) {}

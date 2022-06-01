@@ -17,6 +17,11 @@ const handleOnClickCreateNewGraph = () => {
   dispatch(createNewGraph());
 };
 
+const handleClick = async () => {
+  const filePath = await window.fileApi.openFile();
+  console.log(filePath);
+};
+
 interface StartMenuItemProps {
   label: string;
   icon: React.ReactElement<SvgIconProps>;
@@ -31,7 +36,7 @@ const startMenuItems: StartMenuItemProps[] = [
     navigateTo: '/editor',
     clickAction: handleOnClickCreateNewGraph,
   },
-  { label: 'Open graph...', icon: <OpenIcon /> },
+  { label: 'Open graph...', icon: <OpenIcon />, clickAction: handleClick },
 ];
 
 export const StartMenu = () => {
