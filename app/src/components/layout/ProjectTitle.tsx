@@ -1,60 +1,75 @@
-import { Edit, SaveAsRounded } from '@mui/icons-material';
-import { Box, IconButton, TextField, Typography } from '@mui/material';
-import { lineHeight } from '@mui/system';
-import React, { useState } from 'react';
+import { EditRounded, SaveAsRounded } from '@mui/icons-material';
+import { Box, IconButton, InputAdornment, TextField, Tooltip } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { changeTitle } from '../../core/redux/features/editor/editorSlice';
+import { useAppDispatch, useAppSelector } from '../../core/redux/hooks';
+
+const titleMaxLength = 20;
 
 export const ProjectTitle = () => {
-  const [title, setTitle] = useState<string>('Title');
-  const [isTitleEditable, setIsTitleEditable] = useState<boolean>(true);
+  const dispatch = useAppDispatch();
+  const titleName = useAppSelector((state) => state.editor.graph?.metaData.name);
+  const [title, setTitle] = useState<string>(titleName);
+  const [isTitleEditable, setIsTitleEditable] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
-  const titleMaxLength = 20;
 
-  const updateTitleorErrorMsg = () => {
-    // TODO: Pass title value as parameter
-    var titleFieldValue = (document.getElementById('TitleField') as HTMLInputElement).value;
-    if (titleFieldValue.length >= titleMaxLength) {
-      setIsError(() => true);
+  // Update title when redux state changes
+  useEffect(() => {
+    if (title !== titleName) {
+      setTitle(titleName);
+    }
+  }, [titleName]);
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value.length > titleMaxLength) {
+      setIsError(true);
     } else {
-      setIsError(() => false);
-      setTitle(titleFieldValue);
-      setIsTitleEditable(() => false);
+      if (isError) setIsError(false);
+      setTitle(value);
     }
   };
 
-  const handleKeyDownInTitle = (event: any) => {
-    if (event.keyCode === 13) {
-      updateTitleorErrorMsg();
+  const handleOnClick = () => {
+    if (isTitleEditable) {
+      dispatch(changeTitle(title));
     }
+    setIsTitleEditable((prevState) => !prevState);
+  };
+
+  const handleOnSubmit = () => {
+    dispatch(changeTitle(title));
+    setIsTitleEditable(false);
   };
 
   return (
     <Box>
-      {isTitleEditable ? (
-        <Box sx={{ display: 'flex' }}>
+      <Box component={'form'} onSubmit={handleOnSubmit} sx={{ display: 'flex' }}>
+        <Tooltip
+          open={isError}
+          arrow
+          title={`The title should be at most ${titleMaxLength} characters.`}
+        >
           <TextField
-            id="TitleField"
-            error={isError}
-            helperText={isError ? 'Please enter a title with less than 20 characters' : ''}
-            defaultValue={title}
+            value={title}
+            label={'Title'}
             variant="outlined"
+            disabled={!isTitleEditable}
             size="small"
-            onChange={() => setIsTitleEditable(() => true)}
-            onKeyDown={handleKeyDownInTitle}
+            onChange={handleOnChange}
             sx={{ input: { color: 'white' } }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleOnClick}>
+                    {isTitleEditable ? <SaveAsRounded /> : <EditRounded />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
-          <IconButton>
-            <SaveAsRounded onClick={() => updateTitleorErrorMsg()} />
-          </IconButton>
-        </Box>
-      ) : (
-        <Box sx={{ display: 'flex' }}>
-          <Typography sx={{ lineHeight: 3 }}> {title} </Typography>
-          <IconButton>
-            <Edit onClick={() => setIsTitleEditable(() => true)} />
-          </IconButton>
-        </Box>
-      )
-      }
-    </Box >
+        </Tooltip>
+      </Box>
+    </Box>
   );
 };
