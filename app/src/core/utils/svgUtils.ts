@@ -57,3 +57,21 @@ export function createPathDString(
 
   return d;
 }
+
+
+export const getVectorLength = (start: Position, end: Position) => 
+  Math.sqrt((end.x - start.x) ** 2 + (end.y - start.y) ** 2);
+
+export const getVectorAngle = (start: Position, end: Position) => 
+  Math.atan2(end.y - start.y, end.x - start.x) * (180 / Math.PI);
+
+export const getUnitVector = (start: Position, end: Position) => {
+  const length = getVectorLength(start, end);
+  return { x: (end.x - start.x) / length, y: (end.y - start.y) / length };
+}
+
+export const toDegrees =  (angle: number) =>
+  angle * (180 / Math.PI);
+
+export const toRadians = (angle: number) =>
+  angle * (Math.PI / 180);

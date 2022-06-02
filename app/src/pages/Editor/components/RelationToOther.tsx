@@ -1,6 +1,10 @@
-import { activityHeight, activityWidth } from '../../../core/constants';
+import { getRelationColor, RelationType } from "../../../core/models/Relations";
+import { activityHeight, activityWidth, circleRadius, relationStrokeWidth, relationVectorShortening, relationVectorShorteningResponse } from '../../../core/constants';
 import { Position, RelationToOther as RelationToOtherModel } from '../../../core/models';
 import { useAppSelector } from '../../../core/redux/hooks';
+import { getUnitVector, getVectorLength, getVectorAngle } from "../../../core/utils/svgUtils";
+import { ArrowHead } from "./ArrowHead";
+
 
 interface RelationToOtherProps extends RelationToOtherModel {
   fromPosition: Position;
@@ -23,6 +27,8 @@ export const RelationToOther = (props: RelationToOtherProps) => {
   const { x: x1, y: y1 } = props.fromPosition;
 
   const { x: x2, y: y2 } = pointingToPostion;
+
+  let color = getRelationColor(props.type);
 
   const getActivityRect = ({ x, y }: Position) => ({
     top: y,
@@ -47,22 +53,30 @@ export const RelationToOther = (props: RelationToOtherProps) => {
   const innerWidth = outerRect.right - outerRect.left - 2 * activityWidth;
   const innerHeight = outerRect.bottom - outerRect.top - 2 * activityHeight;
 
-  // const h = Math.sqrt((end.x - start.x) ** 2 + (end.y - start.y));
-  // const angle = Math.atan2(end.y - start.y, end.x - start.x) * (180 / Math.PI);
+  const hasDot = props.type === RelationType.Response || props.type === RelationType.LogicalInclude || props.type === RelationType.NoResponse || props.type === RelationType.Include || props.type === RelationType.Exclude;
 
-  // console.log(angle);
-
+  const unitVector = getUnitVector(props.fromPosition, pointingToPostion);
+  const vectorLength = getVectorLength(props.fromPosition, pointingToPostion);
+  const vectorAng = getVectorAngle(props.fromPosition, pointingToPostion);
+  const newLength = props.type === RelationType.Response ? vectorLength - relationVectorShorteningResponse : vectorLength - relationVectorShortening;
+  const newVector = {x: unitVector.x * newLength, y: unitVector.y * newLength};
   // Steps:
   // 1: determine from where the arrows should orignate from by finding the angle from the one center to the next
-  // if the angle is between -25 and 25 it is to the left*
+  // if the angle is between -22,5 and 22,5 it is to the left*
   // https://gamedev.stackexchange.com/questions/154036/efficient-minimum-distance-between-two-axis-aligned-squares
 
   return (
     <>
-      <g id="relation" transform="translate(0,0)" style={{ visibility: 'visible' }}>
-        <path d={`M ${x1} ${y1} L ${x2} ${y2}`} fill="none" stroke="rgb(255, 255, 255)" />
-      </g>
-      <rect
+      {hasDot && <circle
+        cx={x1}
+        cy={y1}
+        r={circleRadius}
+        fill={color}
+      />}
+        <path d={`M ${x1} ${y1} L ${x1 + newVector.x} ${y1 + newVector.y}`} fill="none" stroke={color} strokeWidth={relationStrokeWidth} />
+        <ArrowHead rotateDeg={vectorAng} position={{x: x1 + newVector.x, y: y1 + newVector.y}} type={props.type} />
+      {/* </g> */}
+      {/* <rect
         className="inner"
         stroke="green"
         x={Math.min(x1 + activityWidth, x2)}
@@ -79,7 +93,7 @@ export const RelationToOther = (props: RelationToOtherProps) => {
         x={outerRect.left}
         width={outerRect.right - outerRect.left}
         height={outerRect.bottom - outerRect.top}
-      />
+      /> */}
     </>
   );
 };

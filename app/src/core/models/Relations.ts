@@ -16,6 +16,31 @@ export enum RelationType {
   Value,
 }
 
+export const getRelationColor = (type: RelationType) => {
+  switch (type) {
+    case RelationType.PreCondition:
+      return "orange";
+    case RelationType.Response:
+      return "cornflowerblue";
+    case RelationType.LogicalInclude:
+      return "green";
+    case RelationType.NoResponse:
+      return "brown";
+    case RelationType.Include:
+      return "green";
+    case RelationType.Exclude:
+      return "red";
+    case RelationType.Spawn:
+      return "black";
+    case RelationType.Condition:
+      return "orange";
+    case RelationType.Milestone:
+      return "purple";
+    case RelationType.Value:
+      return "gray";
+  }
+};
+
 export interface RelationToSelf {
   rid: Rid;
   type: RelationType;

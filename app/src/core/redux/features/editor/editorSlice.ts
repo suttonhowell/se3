@@ -6,6 +6,7 @@ import {
   initialActivity,
   initialDCRGraph,
   Position,
+  RelationType,
 } from '../../../../core/models';
 import { addRelationReducer } from './editorReducers';
 
@@ -19,6 +20,7 @@ export interface EditorState {
   selectedElement: Activity | null;
   offset: Position | null;
   usingTool: ToolType;
+  addRelationType: RelationType;
   addRelationArgs: Aid | null;
 }
 
@@ -27,6 +29,7 @@ const initialState: EditorState = {
   selectedElement: null,
   offset: null,
   usingTool: ToolType.None,
+  addRelationType: RelationType.PreCondition,
   addRelationArgs: null,
 };
 
@@ -53,6 +56,9 @@ export const editorSlice = createSlice({
       // Removes the addRelationArg if tool deactivated early
       if (action.payload !== ToolType.AddRelation) state.addRelationArgs = null;
     },
+    chooseRelationType: (state, action: PayloadAction<RelationType>) => {
+      state.addRelationType = action.payload
+    },
     moveActivity: (state, action: PayloadAction<{ aid: Aid; position: Position }>) => {
       const updatedActivities = state.graph.activities.map((activity) =>
         activity.aid !== action.payload.aid
@@ -74,6 +80,7 @@ export const {
   selectElement,
   changeTitle,
   moveActivity,
+  chooseRelationType,
   pickTool,
 } = editorSlice.actions;
 

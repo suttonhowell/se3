@@ -2,7 +2,7 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { Autocomplete, Box, Fab, TextField, Tooltip, Zoom } from '@mui/material';
 import { useState } from 'react';
 import { RelationType } from '../../../core/models';
-import { pickTool, ToolType } from '../../../core/redux/features/editor/editorSlice';
+import { chooseRelationType, pickTool, ToolType } from '../../../core/redux/features/editor/editorSlice';
 import { useAppDispatch, useAppSelector } from '../../../core/redux/hooks';
 
 export const AddRelationFABTool = () => {
@@ -25,6 +25,7 @@ export const AddRelationFABTool = () => {
           disableClearable
           onChange={(event: any, newValue: AddRelationTypeItem) => {
             setChosenRelationType(newValue);
+            dispatch(chooseRelationType(newValue.type));
           }}
           renderInput={(params) => (
             <TextField
@@ -54,10 +55,10 @@ interface AddRelationTypeItem {
 }
 
 const addRelationTypeItems: readonly AddRelationTypeItem[] = [
-  { label: 'PreCondition', type: RelationType.PreCondition },
+  { label: 'Pre-condition', type: RelationType.PreCondition },
   { label: 'Response', type: RelationType.Response },
-  { label: 'LogicalInclude', type: RelationType.LogicalInclude },
-  { label: 'NoResponse', type: RelationType.NoResponse },
+  { label: 'Logical Include', type: RelationType.LogicalInclude },
+  { label: 'No-response', type: RelationType.NoResponse },
   { label: 'Include', type: RelationType.Include },
   { label: 'Exclude', type: RelationType.Exclude },
   { label: 'Spawn', type: RelationType.Spawn },

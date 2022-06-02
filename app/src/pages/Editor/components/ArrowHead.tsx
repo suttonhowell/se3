@@ -1,30 +1,47 @@
+import { circleRadius } from '../../../core/constants';
+import { relationVectorShorteningResponse } from '../../../core/constants';
 import { Position } from '../../../core/models/DCRGraph';
-import { createPathDString } from '../../../core/utils';
+import { getRelationColor, RelationType } from '../../../core/models/Relations';
+import { toRadians } from '../../../core/utils/svgUtils';
 
 interface ArrowHeadProps {
   rotateDeg: number;
   position: Position;
-  color?: string;
+  type: RelationType;
 }
 
 const XOffset = 0; // placement of the arrow tail points on the X axis from the middle
-const YOffset = 3; // placement of the arrow tail points on the Y axis from the middle
-const POffset = 6; // placement of the arrow point on the X axis from the begining
+const YOffset = 5; // placement of the arrow tail points on the Y axis from the middle
+const POffset = 10; // placement of the arrow point on the X axis from the begining
 // TODO hardcord the d property
-export const ArrowHead = ({ rotateDeg, position, color }: ArrowHeadProps) => {
+export const ArrowHead = ({ rotateDeg, position, type }: ArrowHeadProps) => {
   const { x, y } = position;
 
-  const dPath = createPathDString(
-    { x, y },
-    [
-      { x: x - XOffset, y: y - YOffset },
-      { x: x + POffset, y },
-      { x: x - XOffset, y: y + YOffset },
-    ],
-    true
-  );
+  let color = getRelationColor(type);
+
+  const dString = `M ${x} ${y} L ${x - XOffset} ${y - YOffset} L ${x + POffset} ${y} L ${x - XOffset} ${y + YOffset} Z`;
+
+  const symbolX = x + Math.cos(toRadians(rotateDeg)) * (relationVectorShorteningResponse + circleRadius);
+  const symbolY = y + Math.sin(toRadians(rotateDeg)) * (relationVectorShorteningResponse + circleRadius);
 
   return (
-    <path d={dPath} fill={color} stroke={color} transform={`rotate(${rotateDeg},${x},${y})`} />
+    <>
+      <path d={dString} fill={color} stroke={color} transform={`rotate(${rotateDeg},${x},${y})`} />
+      {type === RelationType.Condition && <circle
+        cx={symbolX}
+        cy={symbolY}
+        r={circleRadius}
+        fill={color}
+      />}
+      // TODO: Fix plus symbol (maybe svg?)
+      {type === RelationType.Include && <text
+        x={symbolX}
+        y={symbolY}
+        fill={color}
+        fontSize={40}
+        pointerEvents="none"
+        stroke="none"
+        >+</text>}
+    </>
   );
 };
