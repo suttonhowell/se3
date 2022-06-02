@@ -13,7 +13,7 @@ export const addRelationReducer = (
   action: PayloadAction<Aid | null>
 ) => {
   // Use null as payload to cancel addRelation
-  if (!action.payload) {
+  if (action.payload === null) {
     return { ...state, addRelationArgs: null };
   }
   const addRelationArgs = state.addRelationArgs;
@@ -24,24 +24,27 @@ export const addRelationReducer = (
   // Is Relation to self
   if (addRelationArgs === action.payload) {
     state.addRelationArgs = null;
-    const updatedActivities = state.graph.activies.map((a) =>
+    const updatedActivities = state.graph.activities.map((a) =>
       a.aid !== addRelationArgs
         ? a
-        : { ...a, relations: [...a.relations, createNewRelationsToSelf(a.aid)] }
+        : { ...a, relationsToSelf: [...a.relationsToSelf, createNewRelationsToSelf(a.aid)] }
     );
-    state.graph.activies = updatedActivities;
+    state.graph.activities = updatedActivities;
   } else {
     // Is Relation to other
-    return {
-      ...state,
-      addRelationArgs: null,
-      graph: {
-        ...state.graph,
-        relations: [
-          ...state.graph.relations,
-          createNewRelationToOther(addRelationArgs, action.payload),
-        ],
-      },
-    };
+    const updatedActivities = state.graph.activities.map((a) =>
+      a.aid !== addRelationArgs
+        ? a
+        : {
+            ...a,
+            relationsToOthers: [
+              ...a.relationsToOthers,
+              // For some reason TS need the string casting even though we return if null earlier
+              createNewRelationToOther(addRelationArgs, action.payload as string),
+            ],
+          }
+    );
+    state.graph.activities = updatedActivities;
+    state.addRelationArgs = null;
   }
 };

@@ -34,7 +34,7 @@ export const TopToolbar = () => {
   const dispatch = useAppDispatch();
   const { isRelationToolActive, hasActivities } = useAppSelector((state) => ({
     isRelationToolActive: state.editor.usingTool === ToolType.AddRelation,
-    hasActivities: state.editor.graph.activies.length > 0,
+    hasActivities: state.editor.graph.activities.length > 0,
   }));
   const [hasHistory, setHasHistory] = useState(false);
   const [hasSelected, setHasSelected] = useState(false);

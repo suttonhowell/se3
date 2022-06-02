@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Position } from '../models/DCRGraph';
 import { moveActivity } from '../redux/features/editor/editorSlice';
+import { useAppSelector } from '../redux/hooks';
 
 const getRelativeMousePosition = (
   e: React.MouseEvent<SVGElement, MouseEvent>,
@@ -14,6 +15,7 @@ const getRelativeMousePosition = (
   };
 };
 
+// Gets the X and Y value from transform=(translate) property
 const getTranslateXY = (target: SVGElement) => {
   const style = window.getComputedStyle(target);
   const transfromMatrix = style.transform;
@@ -34,18 +36,21 @@ type UseDragSVGElementHook = [
 ];
 
 export const useDragSVGElement = (): UseDragSVGElementHook => {
+  const dispatch = useDispatch();
+  const selectedElement = useAppSelector((state) => state.editor.selectedElement);
   const canvasRef = useRef<SVGSVGElement>(null);
+  const [aid, setAid] = useState<string>('');
   const [draggedElement, setDraggedElement] = useState<(EventTarget & SVGElement) | null>(null);
   const [offset, setOffset] = useState<Position | null>(null);
-  const dispatch = useDispatch();
 
   const startDrag = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     const target = e.target as SVGElement;
     if (target.classList.contains('draggable')) {
       const gElement = target.parentNode as SVGElement;
-      setDraggedElement(gElement);
       const { x: mouseX, y: mouseY } = getRelativeMousePosition(e, canvasRef);
       const { x, y } = getTranslateXY(gElement);
+      setDraggedElement(gElement);
+      setAid(target.id);
       setOffset({
         x: mouseX - x,
         y: mouseY - y,
@@ -66,17 +71,17 @@ export const useDragSVGElement = (): UseDragSVGElementHook => {
   };
 
   const endDrag = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
-    if (draggedElement && offset) {
-      const { x: mouseX, y: mouseY } = getRelativeMousePosition(e, canvasRef);
+    if (draggedElement && selectedElement) {
       const { x, y } = getTranslateXY(draggedElement);
+      console.log(x, y);
       // True if the activity was moved doing the dragging phase
-      if (x !== mouseX - offset.x && y !== mouseY - offset.y) {
-        const aid = draggedElement.id;
+      if (x !== selectedElement.position.x && y !== selectedElement.position.y) {
         const position = { x: x, y: y };
         dispatch(moveActivity({ aid, position }));
       }
-      setDraggedElement(null);
     }
+    setDraggedElement(null);
+    setAid('');
   };
 
   return [canvasRef, startDrag, drag, endDrag];

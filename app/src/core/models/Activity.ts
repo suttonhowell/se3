@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Position } from './DCRGraph';
-import { RelationToSelf } from './Relations';
+import { RelationToOther, RelationToSelf } from './Relations';
 
 export type Aid = string;
 
@@ -18,7 +18,8 @@ export interface Activity {
     textColor: string;
     bgColor: string;
   };
-  relations: RelationToSelf[];
+  relationsToSelf: RelationToSelf[];
+  relationsToOthers: RelationToOther[];
   parrent?: Aid;
   nestedActivities: Activity[];
 }
@@ -38,6 +39,7 @@ export const initialActivity = (): Activity => ({
     bgColor: 'white',
     textColor: 'black',
   },
-  relations: [],
+  relationsToSelf: [],
+  relationsToOthers: [],
   nestedActivities: [],
 });

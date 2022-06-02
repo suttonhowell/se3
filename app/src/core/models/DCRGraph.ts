@@ -1,17 +1,14 @@
 import { Activity } from './Activity';
-import { RelationToOther } from './Relations';
 
 export interface DCRGraph {
-  activies: Activity[];
-  relations: RelationToOther[];
+  activities: Activity[];
   metaData: {
     name: string;
   };
 }
 
 export const initialDCRGraph: DCRGraph = {
-  activies: [],
-  relations: [],
+  activities: [],
   metaData: {
     name: 'Untitled',
   },
