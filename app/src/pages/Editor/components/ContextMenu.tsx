@@ -5,7 +5,7 @@ import { useAppSelector } from '../../../core/redux/hooks';
 export const ContextMenu = () => {
   const { selectedElement, activities } = useAppSelector((state) => ({
     selectedElement: state.editor.selectedElement,
-    activities: state.editor.graph?.activities,
+    activities: state.editor.graph.activities,
   }));
 
   return (

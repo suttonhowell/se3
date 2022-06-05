@@ -32,7 +32,7 @@ export const editorSlice = createSlice({
       };
     },
     addActivity: (state) => {
-      state.graph?.activities.push({
+      state.graph.activities.push({
         aid: uuidv4(),
         label: 'Activity',
         position: { x: 100, y: 100 },
@@ -70,14 +70,12 @@ export const editorSlice = createSlice({
       }
     },
     moveActivity: (state, action: PayloadAction<{ aid: Aid; position: Position }>) => {
-      if (state.graph) {
-        const updatedActivities = state.graph.activities.map((activity) =>
-          activity.aid !== action.payload.aid
-            ? activity
-            : { ...activity, position: action.payload.position }
-        );
-        state.graph.activities = updatedActivities;
-      }
+      const updatedActivities = state.graph.activities.map((activity) =>
+        activity.aid !== action.payload.aid
+          ? activity
+          : { ...activity, position: action.payload.position }
+      );
+      state.graph.activities = updatedActivities;
     },
   },
 });

@@ -34,7 +34,6 @@ const zoomItemList: DropDownItemProps[] = zoomList.map((item) => ({
 export const TopToolbar = () => {
   const hasSelected = useAppSelector((state) => state.editor.selectedElement != null);
   const [hasHistory, setHasHistory] = useState(false);
-  // const [hasSelected, setHasSelected] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(100);
   const [isRelationToolActive, setIsRelationToolActive] = useState(false);
   const [predecessor, successor] = useIterNumberArray(zoomLevelsIncrements, 100);
