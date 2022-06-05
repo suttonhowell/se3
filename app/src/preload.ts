@@ -8,4 +8,5 @@ contextBridge.exposeInMainWorld('darkMode', {
 
 contextBridge.exposeInMainWorld('fileApi', {
   openFile: () => ipcRenderer.invoke('dialog:openFile'),
+  saveFile: (content: string) => ipcRenderer.invoke('dialog:saveFile', content)
 });

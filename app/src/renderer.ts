@@ -36,6 +36,7 @@ declare global {
     };
     fileApi: {
       openFile: () => Promise<string | undefined>;
+      saveFile: (content: string) => Promise<undefined>;
     };
   }
 }

@@ -12,7 +12,7 @@ import React, { Fragment, useState } from 'react';
 import { ButtonDropDown, DropDownItemProps } from '../../../components/navigation/ButtonDropDown';
 import { useIterNumberArray } from '../../../core/hooks/useIterArray';
 import { store } from '../../../core/redux/store';
-// import { saveGraph } from '../../../core/utils/graphUtils'
+import { saveGraph } from '../../../core/utils/graphUtils'
 
 type MenuState = {
   hasHistory: boolean;
@@ -32,7 +32,7 @@ export const TopToolbar = () => {
   });
   const [predecessor, successor] = useIterNumberArray(zoomLevelsIncrements, 100);
 
-  const handleOnClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleOnClick = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const { name } = e.currentTarget;
     switch (name) {
       case 'undo':
@@ -54,8 +54,6 @@ export const TopToolbar = () => {
           ...prevState,
           zoomLevel: predecessor(prevState.zoomLevel),
         }));
-        const graph = store.getState().editor.graph;
-        // if (graph !== undefined) saveGraph(graph)
         break;
       case 'delete':
         setMenuState((prevState) => ({
