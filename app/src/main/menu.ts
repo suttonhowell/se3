@@ -4,24 +4,25 @@ const isMac = process.platform === 'darwin';
 const isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
 app.setName('DCRGraphMaker');
+
 export const menuTemplate: (Electron.MenuItemConstructorOptions | Electron.MenuItem)[] = [
   ...(isMac
     ? ([
-        {
-          label: app.name,
-          submenu: [
-            { role: 'about' },
-            { type: 'separator' },
-            { role: 'services' },
-            { type: 'separator' },
-            { role: 'hide' },
-            { role: 'hideOthers' },
-            { role: 'unhide' },
-            { type: 'separator' },
-            { role: 'quit' },
-          ],
-        },
-      ] as Electron.MenuItemConstructorOptions[])
+      {
+        label: app.name,
+        submenu: [
+          { role: 'about' },
+          { type: 'separator' },
+          { role: 'services' },
+          { type: 'separator' },
+          { role: 'hide' },
+          { role: 'hideOthers' },
+          { role: 'unhide' },
+          { type: 'separator' },
+          { role: 'quit' },
+        ],
+      },
+    ] as Electron.MenuItemConstructorOptions[])
     : []),
   {
     label: 'File',
@@ -38,13 +39,15 @@ export const menuTemplate: (Electron.MenuItemConstructorOptions | Electron.MenuI
           console.log('Save was clicked\n');
         },
       }, //end of Save
-      {
-        label: 'Exit',
-        click() {
-          console.log('Exit was clicked\nExiting...\n');
-          app.quit();
-        },
-      }, //end of Exit
+      ...(isMac
+        ? []
+        : [{
+          label: 'Exit',
+          click() {
+            console.log('Exit was clicked\nExiting...\n');
+            app.quit();
+          },
+        }]), //end of Exit
     ],
   }, //end of File submenu
   {
@@ -100,10 +103,10 @@ export const menuTemplate: (Electron.MenuItemConstructorOptions | Electron.MenuI
   }, //end of Settings submenu
   ...(isDebug
     ? ([
-        {
-          label: 'Development',
-          submenu: [{ role: 'reload' }, { role: 'forceReload' }, { role: 'toggleDevTools' }],
-        },
-      ] as Electron.MenuItemConstructorOptions[])
+      {
+        label: 'Development',
+        submenu: [{ role: 'reload' }, { role: 'forceReload' }, { role: 'toggleDevTools' }],
+      },
+    ] as Electron.MenuItemConstructorOptions[])
     : []),
 ];

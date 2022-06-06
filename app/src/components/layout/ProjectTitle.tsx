@@ -8,7 +8,7 @@ const titleMaxLength = 20;
 
 export const ProjectTitle = () => {
   const dispatch = useAppDispatch();
-  const titleName = useAppSelector((state) => state.editor.graph?.metaData.name);
+  const titleName = useAppSelector((state) => state.editor.graph.metaData.name);
   const [title, setTitle] = useState<string>(titleName);
   const [isTitleEditable, setIsTitleEditable] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
