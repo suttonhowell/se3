@@ -10,8 +10,8 @@ export const circleRadius = 6;
 export const relationStrokeWidth = 2.2;
 export const relationVectorShorteningResponse = 10;
 export const relationVectorShortening = 25;
+export const endIconSizes = [16, 20, 26];
 
 // Add relation tool constants
 export const relationFromColor = 'green';
 export const relationToColor = 'red';
-
