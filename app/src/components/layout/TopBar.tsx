@@ -1,11 +1,14 @@
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import { AppBar, Box, Toolbar, Typography } from '@mui/material';
+import { useLocation } from 'react-router-dom';
+import { ProjectTitle } from './ProjectTitle';
 
 export const TopBar = () => {
+  var location = useLocation();
+
   return (
     <AppBar
-      position="relative"
-      elevation={1}
+      position="fixed"
       sx={(theme) => ({
         zIndex: theme.zIndex.drawer + 1,
       })}
@@ -23,9 +26,13 @@ export const TopBar = () => {
         >
           <AccountTreeIcon fontSize="medium" />
         </Box>
-        <Typography variant="h6" noWrap component="div">
-          DCR Graph Editor
-        </Typography>
+        {location.pathname.includes('editor') ? (
+          <ProjectTitle />
+        ) : (
+          <Typography variant="h5" noWrap component="div">
+            DCR Graph Editor
+          </Typography>
+        )}
       </Toolbar>
     </AppBar>
   );

@@ -3,21 +3,18 @@ import { v4 as uuidv4 } from 'uuid';
 import { Aid, DCRGraph, Position } from '../../../models/DCRGraph';
 
 interface EditorState {
-  graph?: DCRGraph;
+  graph: DCRGraph;
   selectedElement: Aid | null;
   offset: Position | null;
 }
 
 const initialState: EditorState = {
-  graph:
-    process.env.NODE_ENV === 'production'
-      ? undefined
-      : {
-          activies: [],
-          metaData: {
-            name: 'Untitled.dcr',
-          },
-        },
+  graph: {
+    activies: [],
+    metaData: {
+      name: 'Untitled.dcr',
+    },
+  },
   selectedElement: null,
   offset: null,
 };
