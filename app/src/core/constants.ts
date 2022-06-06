@@ -6,11 +6,11 @@ export const activityStrokeWidth = 5;
 export const selectedActivityColor = 'blue';
 
 // Relation constants
-export const circleRadius = 6;
+export const circleRadius = 5;
 export const relationStrokeWidth = 2.2;
 export const relationVectorShorteningResponse = 10;
 export const relationVectorShortening = 25;
-export const endIconSizes = [16, 20, 26];
+export const endIconSizes = [14, 18, 24];
 
 // Add relation tool constants
 export const relationFromColor = 'green';

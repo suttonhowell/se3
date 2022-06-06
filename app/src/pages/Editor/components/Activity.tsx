@@ -69,7 +69,11 @@ export const Activity = (props: ActivityProps) => {
           {props.label}
         </text>
         {props.relationsToSelf.map((rs, idx) => (
-          <RelationToSelf key={rs.rid} startPoint={{ x: 20 * idx, y: -activityStrokeWidth / 2 }} />
+          <RelationToSelf
+            key={rs.rid}
+            startPoint={{ x: 20 * idx, y: -activityStrokeWidth / 2 }}
+            {...rs}
+          />
         ))}
       </g>
       {props.relationsToOthers.map((rt, idx) => (

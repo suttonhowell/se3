@@ -15,8 +15,8 @@ interface ArrowHeadProps {
 }
 
 const XOffset = 0; // placement of the arrow tail points on the X axis from the middle
-const YOffset = 5; // placement of the arrow tail points on the Y axis from the middle
-const POffset = 10; // placement of the arrow point on the X axis from the begining
+const YOffset = 4; // placement of the arrow tail points on the Y axis from the middle
+const POffset = 8; // placement of the arrow point on the X axis from the begining
 
 export const ArrowHead = ({ rotateDeg, position, type }: ArrowHeadProps) => {
   const { x, y } = position;
@@ -106,7 +106,7 @@ export const ArrowHead = ({ rotateDeg, position, type }: ArrowHeadProps) => {
           fill={color}
           fontSize={endIconSizes[0]}
           pointerEvents="none"
-          stroke="none"
+          stroke={color}
         >
           %
         </text>

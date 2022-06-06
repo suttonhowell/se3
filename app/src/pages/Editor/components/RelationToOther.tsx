@@ -1,10 +1,16 @@
-import { getRelationColor, RelationType } from "../../../core/models/Relations";
-import { activityHeight, activityWidth, circleRadius, relationStrokeWidth, relationVectorShortening, relationVectorShorteningResponse } from '../../../core/constants';
+import {
+  activityHeight,
+  activityWidth,
+  circleRadius,
+  relationStrokeWidth,
+  relationVectorShortening,
+  relationVectorShorteningResponse,
+} from '../../../core/constants';
 import { Position, RelationToOther as RelationToOtherModel } from '../../../core/models';
+import { getRelationColor, hasDot, RelationType } from '../../../core/models/Relations';
 import { useAppSelector } from '../../../core/redux/hooks';
-import { getUnitVector, getVectorLength, getVectorAngle } from "../../../core/utils/svgUtils";
-import { ArrowHead } from "./ArrowHead";
-
+import { getUnitVector, getVectorAngle, getVectorLength } from '../../../core/utils/svgUtils';
+import { ArrowHead } from './ArrowHead';
 
 interface RelationToOtherProps extends RelationToOtherModel {
   fromPosition: Position;
@@ -53,13 +59,16 @@ export const RelationToOther = (props: RelationToOtherProps) => {
   const innerWidth = outerRect.right - outerRect.left - 2 * activityWidth;
   const innerHeight = outerRect.bottom - outerRect.top - 2 * activityHeight;
 
-  const hasDot = props.type === RelationType.Response || props.type === RelationType.LogicalInclude || props.type === RelationType.NoResponse || props.type === RelationType.Include || props.type === RelationType.Exclude;
+  const startDot = hasDot(props.type);
 
   const unitVector = getUnitVector(props.fromPosition, pointingToPostion);
   const vectorLength = getVectorLength(props.fromPosition, pointingToPostion);
   const vectorAng = getVectorAngle(props.fromPosition, pointingToPostion);
-  const newLength = props.type === RelationType.Response ? vectorLength - relationVectorShorteningResponse : vectorLength - relationVectorShortening;
-  const newVector = {x: unitVector.x * newLength, y: unitVector.y * newLength};
+  const newLength =
+    props.type === RelationType.Response
+      ? vectorLength - relationVectorShorteningResponse
+      : vectorLength - relationVectorShortening;
+  const newVector = { x: unitVector.x * newLength, y: unitVector.y * newLength };
   // Steps:
   // 1: determine from where the arrows should orignate from by finding the angle from the one center to the next
   // if the angle is between -22,5 and 22,5 it is to the left*
@@ -67,14 +76,18 @@ export const RelationToOther = (props: RelationToOtherProps) => {
 
   return (
     <>
-      {hasDot && <circle
-        cx={x1}
-        cy={y1}
-        r={circleRadius}
-        fill={color}
-      />}
-        <path d={`M ${x1} ${y1} L ${x1 + newVector.x} ${y1 + newVector.y}`} fill="none" stroke={color} strokeWidth={relationStrokeWidth} />
-        <ArrowHead rotateDeg={vectorAng} position={{x: x1 + newVector.x, y: y1 + newVector.y}} type={props.type} />
+      {startDot && <circle cx={x1} cy={y1} r={circleRadius} fill={color} />}
+      <path
+        d={`M ${x1} ${y1} L ${x1 + newVector.x} ${y1 + newVector.y}`}
+        fill="none"
+        stroke={color}
+        strokeWidth={relationStrokeWidth}
+      />
+      <ArrowHead
+        rotateDeg={vectorAng}
+        position={{ x: x1 + newVector.x, y: y1 + newVector.y }}
+        type={props.type}
+      />
       {/* </g> */}
       {/* <rect
         className="inner"

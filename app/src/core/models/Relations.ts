@@ -19,26 +19,36 @@ export enum RelationType {
 export const getRelationColor = (type: RelationType) => {
   switch (type) {
     case RelationType.PreCondition:
-      return "orange";
+      return 'orange';
     case RelationType.Response:
-      return "cornflowerblue";
+      return 'cornflowerblue';
     case RelationType.LogicalInclude:
-      return "green";
+      return 'green';
     case RelationType.NoResponse:
-      return "brown";
+      return 'brown';
     case RelationType.Include:
-      return "green";
+      return 'green';
     case RelationType.Exclude:
-      return "red";
+      return 'red';
     case RelationType.Spawn:
-      return "black";
+      return 'black';
     case RelationType.Condition:
-      return "orange";
+      return 'orange';
     case RelationType.Milestone:
-      return "purple";
+      return 'purple';
     case RelationType.Value:
-      return "gray";
+      return 'gray';
   }
+};
+
+export const hasDot = (type: RelationType) => {
+  return (
+    type === RelationType.Response ||
+    type === RelationType.LogicalInclude ||
+    type === RelationType.NoResponse ||
+    type === RelationType.Include ||
+    type === RelationType.Exclude
+  );
 };
 
 export interface RelationToSelf {
