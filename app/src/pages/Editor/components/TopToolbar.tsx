@@ -6,6 +6,7 @@ import {
   UndoRounded as UndoIcon,
   ZoomInRounded as ZoomInIcon,
   ZoomOutRounded as ZoomOutIcon,
+  SaveRounded as SaveIcon,
 } from '@mui/icons-material';
 import { AppBar, Toolbar } from '@mui/material';
 import React, { useState } from 'react';
@@ -51,8 +52,6 @@ export const TopToolbar = () => {
 
   const handleOnClickZoomIn = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setZoomLevel(successor(zoomLevel));
-    const graph = store.getState().editor.graph;
-    if (graph !== undefined) saveGraphIPC(window, graph);
   };
 
   const handleOnClickZoomOut = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -70,6 +69,11 @@ export const TopToolbar = () => {
   const handleOnZoomLevelClick = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     setZoomLevel(e.currentTarget.value);
   };
+
+  const handleOnClickSave = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const graph = store.getState().editor.graph;
+    if (graph !== undefined) saveGraphIPC(window, graph);
+  }
 
   return (
     <AppBar position="relative" color="inherit" elevation={4}>
@@ -124,7 +128,7 @@ export const TopToolbar = () => {
             onClick={handleOnClickDelete}
           />
         </ToolbarButtonGroup>
-        <ToolbarButtonGroup disableDivider>
+        <ToolbarButtonGroup>
           <ToolbarButton
             tooltipTitle={
               (isRelationToolActive ? 'Deactivate' : 'Activate') + '"Add relation tool"'
@@ -133,6 +137,13 @@ export const TopToolbar = () => {
             // TODO: Find a better suited icon for this button
             children={<RelationToolIcon />}
             onClick={handleOnClickRelationTool}
+          />
+        </ToolbarButtonGroup>
+        <ToolbarButtonGroup disableDivider>
+          <ToolbarButton
+            tooltipTitle="Save as file"
+            children={<SaveIcon />}
+            onClick={handleOnClickSave}
           />
         </ToolbarButtonGroup>
       </Toolbar>
