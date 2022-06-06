@@ -29,20 +29,13 @@ export const saveFile = async (content: string) => {
   }
 }
 
-export async function saveGraphIPC(window: Window, graph: DCRGraph) {
-  const graphJSON = JSON.stringify(graph);
-  await window.fileApi.saveFile(graphJSON);
-}
-
-export async function loadGraphIPC(window: Window) {
-  return await window.fileApi.openFile();
-}
-
+// use in the main process 
 export async function saveGraph(graph: DCRGraph) {
   const graphJSON = JSON.stringify(graph);
   await saveFile(graphJSON);
 }
 
+// use in the main process 
 export async function loadGraph() {
   return await openFile();
 }

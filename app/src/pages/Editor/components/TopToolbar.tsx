@@ -14,7 +14,7 @@ import { ToolbarButton } from '../../../components/navigation/ToolbarButton';
 import { ToolbarButtonGroup } from '../../../components/navigation/ToolbarButtonGroup';
 import { useIterNumberArray } from '../../../core/hooks/useIterArray';
 import { store } from '../../../core/redux/store';
-import { saveGraph } from '../../../core/utils/graphUtils'
+import { saveGraphIPC } from '../../../core/utils/graphUtilsIPC'
 
 // Increments used for zoom in and out
 const zoomLevelsIncrements = [
@@ -51,6 +51,8 @@ export const TopToolbar = () => {
 
   const handleOnClickZoomIn = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setZoomLevel(successor(zoomLevel));
+    const graph = store.getState().editor.graph;
+    if (graph !== undefined) saveGraphIPC(window, graph);
   };
 
   const handleOnClickZoomOut = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
