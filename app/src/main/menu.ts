@@ -1,4 +1,6 @@
 import { app } from 'electron';
+import { store } from '../core/redux/store';
+import { saveGraph } from '../core/utils/graphUtils';
 
 const isMac = process.platform === 'darwin';
 const isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
@@ -37,6 +39,9 @@ export const menuTemplate: (Electron.MenuItemConstructorOptions | Electron.MenuI
         label: 'Save',
         click() {
           console.log('Save was clicked\n');
+          const graph = store.getState().editor.graph;
+          console.log(graph);
+          if (graph !== undefined) saveGraph(graph);
         },
       }, //end of Save
       ...(isMac
