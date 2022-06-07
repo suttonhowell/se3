@@ -11,15 +11,20 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { createNewGraph } from '../../../core/redux/features/editor/editorSlice';
+import { openGraph } from '../../../core/redux/features/editor/editorSlice';
 import { dispatch } from '../../../core/redux/store';
 
 const handleOnClickCreateNewGraph = () => {
   dispatch(createNewGraph());
 };
 
-const handleClick = async () => {
+const handleOnClickOpenGraph = async () => {
   const filePath = await window.fileApi.openFile();
+  //filepath contains the "jsonified" version of the graph
   console.log(filePath);
+  //convert back to graph
+  if (filePath) dispatch(openGraph(filePath));
+
 };
 
 interface StartMenuItemProps {
@@ -36,7 +41,12 @@ const startMenuItems: StartMenuItemProps[] = [
     navigateTo: '/editor',
     clickAction: handleOnClickCreateNewGraph,
   },
-  { label: 'Open graph...', icon: <OpenIcon />, clickAction: handleClick },
+  { 
+    label: 'Open graph...', 
+    icon: <OpenIcon />, 
+    navigateTo: '/editor',
+    clickAction: handleOnClickOpenGraph, 
+  },
 ];
 
 export const StartMenu = () => {
