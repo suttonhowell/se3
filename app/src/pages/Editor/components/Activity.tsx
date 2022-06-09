@@ -1,4 +1,5 @@
 import { Box } from '@mui/system';
+import { getActivityRelationPoints } from '../../../core/models/Activity';
 import {
   activityHeaderHeight,
   activityHeight,
@@ -7,7 +8,7 @@ import {
   relationFromColor,
   relationToColor,
 } from '../../../core/constants';
-import { Activity as ActivityType } from '../../../core/models';
+import { Activity as ActivityType, Position } from '../../../core/models';
 import { ToolType } from '../../../core/redux/features/editor/editorSlice';
 import { useAppSelector } from '../../../core/redux/hooks';
 import { RelationToOther } from './RelationToOther';
@@ -16,11 +17,26 @@ import { RelationToSelf } from './RelationToSelf';
 interface ActivityProps extends ActivityType {}
 
 export const Activity = (props: ActivityProps) => {
-  const { selectedElement, isAddingRelation, addRelationArgs } = useAppSelector((state) => ({
+  const { selectedElement, isAddingRelation, addRelationArgs, graph } = useAppSelector((state) => ({
     selectedElement: state.editor.selectedElement,
     isAddingRelation: state.editor.usingTool === ToolType.AddRelation,
     addRelationArgs: state.editor.addRelationArgs,
+    graph: state.editor.graph,
   }));
+
+  let activity = null;
+  for (const a of graph.activities) {
+    if (a.aid === props.aid) {
+      activity = a;
+      break;
+    }
+  }
+  let points: Position[] = [];
+  if (activity) {
+    points = getActivityRelationPoints(activity);
+  }
+  console.log(props.position.x, props.position.y);
+  console.log(points);
 
   return (
     <>
@@ -68,6 +84,9 @@ export const Activity = (props: ActivityProps) => {
         >
           {props.label}
         </text>
+        {
+          points.map((point) => (<circle key={point.x + ',' + point.y} cx={point.x - props.position.x} cy={point.y - props.position.y} r="5" fill="red" />))
+        }
         {props.relationsToSelf.map((rs, idx) => (
           <RelationToSelf
             key={rs.rid}
@@ -77,7 +96,7 @@ export const Activity = (props: ActivityProps) => {
         ))}
       </g>
       {props.relationsToOthers.map((rt, idx) => (
-        <RelationToOther key={rt.rid} fromPosition={props.position} {...rt} />
+        <RelationToOther key={rt.rid} fromAid={props.aid} toAid={rt.to} {...rt} />
       ))}
     </>
   );

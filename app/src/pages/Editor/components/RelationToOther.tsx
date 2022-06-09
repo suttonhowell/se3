@@ -1,3 +1,4 @@
+import { getActivityRelationPoints } from '../../../core/models/Activity';
 import {
   activityHeight,
   activityWidth,
@@ -13,7 +14,9 @@ import { getUnitVector, getVectorAngle, getVectorLength } from '../../../core/ut
 import { ArrowHead } from './ArrowHead';
 
 interface RelationToOtherProps extends RelationToOtherModel {
-  fromPosition: Position;
+  // fromPosition: Position;
+  fromAid: string;
+  toAid: string;
 }
 
 interface RectSides {
@@ -24,15 +27,64 @@ interface RectSides {
 }
 
 export const RelationToOther = (props: RelationToOtherProps) => {
-  const { pointingToPostion } = useAppSelector((state) => ({
-    pointingToPostion: state.editor.graph.activities.find((a) => a.aid === props.to)?.position || {
-      x: 0,
-      y: 0,
-    },
-  }));
-  const { x: x1, y: y1 } = props.fromPosition;
+  // const { pointingToPostion } = useAppSelector((state) => ({
+  //   pointingToPostion: state.editor.graph.activities.find((a) => a.aid === props.to)?.position || {
+  //     x: 0,
+  //     y: 0,
+  //   },
+  // }));
 
-  const { x: x2, y: y2 } = pointingToPostion;
+  const graph = useAppSelector((state) => state.editor.graph);
+
+  let fromActivity = null;
+  let toActivity = null;
+
+  for (const a of graph.activities) {
+    if (a.aid === props.fromAid) {
+      fromActivity = a;
+    }
+
+    if (a.aid === props.toAid) {
+      toActivity = a;
+    }
+  }
+
+  if (!fromActivity || !toActivity) {
+    return <></>;
+  }
+
+  const fromPositions = getActivityRelationPoints(fromActivity);
+  const toPositions = getActivityRelationPoints(toActivity);
+
+  const combinedPositions = [];
+
+  for (const fromPosition of fromPositions) {
+    for (const toPosition of toPositions) {
+      combinedPositions.push({
+        from: fromPosition,
+        to: toPosition,
+        distance: (fromPosition.x - toPosition.x) ** 2 + (fromPosition.y - toPosition.y) ** 2,
+      });
+    }
+  }
+
+  let shortest = combinedPositions[0];
+
+  for (let i = 0; i < combinedPositions.length; i++) {
+    if (combinedPositions[i].distance < shortest.distance) {
+      shortest = combinedPositions[i];
+    }
+  }
+
+  const { x: x1, y: y1 } = shortest.from;
+
+  const { x: x2, y: y2 } = shortest.to;
+
+  // pointingToPostion = { x: x2, y: y2 };
+
+  // const { x: x1, y: y1 } = props.fromPosition;
+
+  // const { x: x2, y: y2 } = pointingToPostion;
 
   let color = getRelationColor(props.type);
 
@@ -61,9 +113,9 @@ export const RelationToOther = (props: RelationToOtherProps) => {
 
   const startDot = hasDot(props.type);
 
-  const unitVector = getUnitVector(props.fromPosition, pointingToPostion);
-  const vectorLength = getVectorLength(props.fromPosition, pointingToPostion);
-  const vectorAng = getVectorAngle(props.fromPosition, pointingToPostion);
+  const unitVector = getUnitVector(shortest.from, shortest.to);
+  const vectorLength = getVectorLength(shortest.from, shortest.to);
+  const vectorAng = getVectorAngle(shortest.from, shortest.to);
   const newLength =
     props.type === RelationType.Response
       ? vectorLength - relationVectorShorteningResponse

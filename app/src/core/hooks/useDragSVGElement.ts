@@ -73,7 +73,6 @@ export const useDragSVGElement = (): UseDragSVGElementHook => {
   const endDrag = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     if (draggedElement && selectedElement) {
       const { x, y } = getTranslateXY(draggedElement);
-      console.log(x, y);
       // True if the activity was moved doing the dragging phase
       if (x !== selectedElement.position.x && y !== selectedElement.position.y) {
         const position = { x: x, y: y };
