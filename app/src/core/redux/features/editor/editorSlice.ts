@@ -1,21 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  Activity,
-  ActivityStyle,
-  Aid,
-  DCRGraph,
-  isActivity,
-  Markings,
-  Position,
-  Relation,
-} from '../../../models/DCRGraph';
+import { ActivityStyle, Aid, DCRGraph, Markings, Position } from '../../../models/DCRGraph';
 
 interface EditorState {
   graph: DCRGraph;
-  selectedElementAid: Aid | null;
-  selectedElement: Activity | Relation | null;
-  offset: Position | null;
+  selectedElement: Aid | null;
 }
 
 const initialState: EditorState = {
@@ -25,9 +14,7 @@ const initialState: EditorState = {
       name: 'Untitled.dcr',
     },
   },
-  selectedElementAid: null,
   selectedElement: null,
-  offset: null,
 };
 
 export const editorSlice = createSlice({
@@ -53,9 +40,9 @@ export const editorSlice = createSlice({
           executed: false,
         },
         style: {
-          borderColor: 'black',
-          bgColor: 'white',
-          textColor: 'black',
+          borderColor: '#000000',
+          bgColor: '#ffffff',
+          textColor: '#000000',
         },
         relations: [],
         parrent: null,
@@ -65,29 +52,20 @@ export const editorSlice = createSlice({
     selectElement: (state, action: PayloadAction<Aid | null>) => {
       const aid = action.payload;
       if (!aid) {
-        state.selectedElementAid = null;
         state.selectedElement = null;
       } else {
-        state.selectedElementAid = aid;
-        state.selectedElement =
-          state.graph.activities.find((a) => a.aid === action.payload) || null;
+        state.selectedElement = aid;
       }
-    },
-    setOffset: (state, action: PayloadAction<Position | null>) => {
-      state.offset = action.payload;
     },
     changeTitle: (state, action: PayloadAction<string>) => {
       state.graph.metaData.name = action.payload;
     },
     changeActivityLabel: (state, action: PayloadAction<{ label: string; aid: string | null }>) => {
       const { label, aid } = action.payload;
-      if (isActivity(state.selectedElement)) {
-        state.selectedElement = { ...state.selectedElement, label };
-        const updatedActivities = state.graph.activities.map((activity) =>
-          activity.aid !== aid ? activity : { ...activity, label }
-        );
-        state.graph.activities = updatedActivities;
-      }
+      const updatedActivities = state.graph.activities.map((activity) =>
+        activity.aid !== aid ? activity : { ...activity, label }
+      );
+      state.graph.activities = updatedActivities;
     },
     moveActivity: (state, action: PayloadAction<{ aid: Aid; position: Position }>) => {
       const updatedActivities = state.graph.activities.map((activity) =>
@@ -102,36 +80,25 @@ export const editorSlice = createSlice({
       action: PayloadAction<{ styleProp: keyof ActivityStyle; color: string; aid: Aid }>
     ) => {
       const { styleProp, color, aid } = action.payload;
-      if (isActivity(state.selectedElement)) {
-        state.selectedElement = {
-          ...state.selectedElement,
-          style: { ...state.selectedElement.style, [styleProp]: color },
-        };
-        const updatedActivities = state.graph.activities.map((activity) =>
-          activity.aid !== aid
-            ? activity
-            : { ...activity, style: { ...activity.style, [styleProp]: color } }
-        );
-        state.graph.activities = updatedActivities;
-      }
+
+      const updatedActivities = state.graph.activities.map((activity) =>
+        activity.aid !== aid
+          ? activity
+          : { ...activity, style: { ...activity.style, [styleProp]: color } }
+      );
+      state.graph.activities = updatedActivities;
     },
     changeMarking: (
       state,
       action: PayloadAction<{ markingsProp: keyof Markings; value: boolean; aid: Aid }>
     ) => {
       const { markingsProp, value, aid } = action.payload;
-      if (isActivity(state.selectedElement)) {
-        state.selectedElement = {
-          ...state.selectedElement,
-          markings: { ...state.selectedElement.markings, [markingsProp]: value },
-        };
-        const updatedActivities = state.graph.activities.map((activity) =>
-          activity.aid !== aid
-            ? activity
-            : { ...activity, markings: { ...activity.markings, [markingsProp]: value } }
-        );
-        state.graph.activities = updatedActivities;
-      }
+      const updatedActivities = state.graph.activities.map((activity) =>
+        activity.aid !== aid
+          ? activity
+          : { ...activity, markings: { ...activity.markings, [markingsProp]: value } }
+      );
+      state.graph.activities = updatedActivities;
     },
   },
 });
@@ -140,7 +107,6 @@ export const {
   createNewGraph,
   addActivity,
   selectElement,
-  setOffset,
   changeTitle,
   moveActivity,
   changeActivityLabel,

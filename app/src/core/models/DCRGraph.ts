@@ -13,8 +13,8 @@ export interface ActivityStyle {
 }
 
 export interface Markings {
-  pending: boolean;
   included: boolean;
+  pending: boolean;
   executed: boolean;
 }
 

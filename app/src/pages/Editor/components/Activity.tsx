@@ -6,7 +6,7 @@ interface ActivityProps extends ActivityType {}
 
 export const Activity = (props: ActivityProps) => {
   const dispatch = useAppDispatch();
-  const { selectedElementAid } = useAppSelector((state) => state.editor);
+  const selectedElement = useAppSelector((state) => state.editor.selectedElement);
   const height = 150;
   const width = 100;
   const headerHeight = 30;
@@ -30,13 +30,13 @@ export const Activity = (props: ActivityProps) => {
         ry="10"
         width={width}
         height={height}
-        stroke={selectedElementAid === props.aid ? 'blue' : props.style.borderColor}
+        stroke={selectedElement === props.aid ? 'blue' : props.style.borderColor}
         fill={props.style.bgColor}
         strokeDasharray={!props.markings.included ? '12 4' : undefined}
       />
       <path
         d={`M ${strokeWidth / 2} ${headerHeight} H ${width - strokeWidth / 2}`}
-        stroke={selectedElementAid === props.aid ? 'blue' : props.style.borderColor}
+        stroke={selectedElement === props.aid ? 'blue' : props.style.borderColor}
         strokeDasharray={!props.markings.included ? '12 4' : undefined}
       />
       <text
@@ -47,6 +47,7 @@ export const Activity = (props: ActivityProps) => {
         pointerEvents="none"
         stroke="none"
         fill={props.style.textColor}
+        style={{ userSelect: 'none' }}
       >
         {props.label}
       </text>
@@ -58,6 +59,7 @@ export const Activity = (props: ActivityProps) => {
           stroke="none"
           fill={'orange'}
           fontSize="larger"
+          style={{ userSelect: 'none' }}
         >
           !
         </text>
@@ -70,6 +72,7 @@ export const Activity = (props: ActivityProps) => {
           stroke="none"
           fill={'green'}
           fontSize="larger"
+          style={{ userSelect: 'none' }}
         >
           ✓
         </text>

@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { ColorPicker } from '../../../components/inputFields/ColorPicker';
-import { ActivityStyle, Aid, isActivity, Markings } from '../../../core/models/DCRGraph';
+import { Activity, ActivityStyle, Aid, isActivity, Markings } from '../../../core/models/DCRGraph';
 import {
   changeActivityLabel,
   changeMarking,
@@ -23,7 +23,11 @@ import {
 import { useAppDispatch, useAppSelector } from '../../../core/redux/hooks';
 
 export const ContextMenu = () => {
-  const selectedElement = useAppSelector((state) => state.editor.selectedElement);
+  const { selectedElementAid, activities } = useAppSelector((state) => ({
+    selectedElementAid: state.editor.selectedElement,
+    activities: state.editor.graph.activities,
+  }));
+  const [selectedElement, setSelectedElement] = useState<Activity | null>(null);
   const dispatch = useAppDispatch();
   const [isLabelEditable, setIsLabelEditable] = useState(false);
   const [label, setLabel] = useState('');
@@ -31,10 +35,14 @@ export const ContextMenu = () => {
   const labelInputRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isActivity(selectedElement)) {
-      setLabel(selectedElement.label);
+    if (selectedElementAid) {
+      const activity = activities.find((a) => a.aid === selectedElementAid) || null;
+      setSelectedElement(activity);
+      if (isActivity(activity)) {
+        setLabel(activity.label);
+      }
     }
-  }, [selectedElement]);
+  }, [selectedElementAid, activities]);
 
   // Set focus on the activity label input when its clicked while being disabled
   useEffect(() => {
@@ -68,7 +76,9 @@ export const ContextMenu = () => {
     aid: Aid
   ) => {
     const value = e.target.checked;
-    dispatch(changeMarking({ markingsProp, value, aid }));
+    if (selectedElement) {
+      dispatch(changeMarking({ markingsProp, value, aid }));
+    }
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +92,7 @@ export const ContextMenu = () => {
       anchor="right"
       hideBackdrop={true}
       variant="persistent"
-      open={selectedElement ? true : false}
+      open={selectedElementAid ? true : false}
     >
       <Box sx={{ width: 300, p: 2 }}>
         <Toolbar />
@@ -118,22 +128,19 @@ export const ContextMenu = () => {
                   sx={{ cursor: 'pointer' }}
                 />
               </Box>
-              {Object.keys(selectedElement.markings).map((key, index) => {
-                const markingProp = key as keyof Markings;
-                return (
-                  <Box key={key}>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={selectedElement.markings[markingProp]}
-                          onChange={(e) => handleChangeMarking(e, markingProp, selectedElement.aid)}
-                        />
-                      }
-                      label={key.charAt(0).toUpperCase() + key.slice(1)}
-                    />
-                  </Box>
-                );
-              })}
+              {markingsList.map((key) => (
+                <Box key={key}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={selectedElement.markings[key]}
+                        onChange={(e) => handleChangeMarking(e, key, selectedElement.aid)}
+                      />
+                    }
+                    label={key.charAt(0).toUpperCase() + key.slice(1)}
+                  />
+                </Box>
+              ))}
             </Box>
             <Divider />
             <Box sx={{ py: 3 }}>
@@ -162,3 +169,5 @@ export const ContextMenu = () => {
     </Drawer>
   );
 };
+
+const markingsList: Array<keyof Markings> = ['included', 'pending', 'executed'];
