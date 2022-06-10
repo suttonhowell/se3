@@ -1,5 +1,5 @@
 export interface DCRGraph {
-  activies: Activity[];
+  activities: Activity[];
   metaData: {
     name: string;
     // Saved for meta data
