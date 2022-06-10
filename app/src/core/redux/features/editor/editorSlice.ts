@@ -31,6 +31,10 @@ export const editorSlice = createSlice({
         },
       };
     },
+    openGraph: (state, action: PayloadAction<string>) => {
+      const graph = JSON.parse(action.payload);
+      state.graph = graph;
+    },
     addActivity: (state) => {
       state.graph?.activies.push({
         aid: uuidv4(),
@@ -74,7 +78,7 @@ export const editorSlice = createSlice({
   },
 });
 
-export const { createNewGraph, addActivity, selectElement, setOffset, changeTitle, moveActivity } =
+export const { createNewGraph, openGraph, addActivity, selectElement, setOffset, changeTitle, moveActivity } =
   editorSlice.actions;
 
 export default editorSlice.reducer;
