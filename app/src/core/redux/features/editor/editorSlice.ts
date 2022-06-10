@@ -30,7 +30,7 @@ export const editorSlice = createSlice({
       };
     },
     addActivity: (state) => {
-      state.graph?.activities.push({
+      state.graph.activities.push({
         aid: uuidv4(),
         label: 'Activity',
         position: { x: 100, y: 100 },
@@ -48,6 +48,14 @@ export const editorSlice = createSlice({
         parrent: null,
         nestedActivities: [],
       });
+    },
+    deleteActivity: (state) => {
+      const selectedElement = state.selectedElement;
+      if (selectedElement === null) return;
+      state.graph.activities = state.graph.activities.filter(
+        (activity) => activity.aid !== selectedElement
+      );
+      state.selectedElement = null;
     },
     selectElement: (state, action: PayloadAction<Aid | null>) => {
       const aid = action.payload;
@@ -80,7 +88,6 @@ export const editorSlice = createSlice({
       action: PayloadAction<{ styleProp: keyof ActivityStyle; color: string; aid: Aid }>
     ) => {
       const { styleProp, color, aid } = action.payload;
-
       const updatedActivities = state.graph.activities.map((activity) =>
         activity.aid !== aid
           ? activity
@@ -106,12 +113,13 @@ export const editorSlice = createSlice({
 export const {
   createNewGraph,
   addActivity,
-  selectElement,
   changeTitle,
   moveActivity,
   changeActivityLabel,
   changeMarking,
   changeStyle,
+  deleteActivity,
+  selectElement,
 } = editorSlice.actions;
 
 export default editorSlice.reducer;
