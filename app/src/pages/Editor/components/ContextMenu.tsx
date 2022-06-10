@@ -113,6 +113,7 @@ export const ContextMenu = () => {
                   onChange={handleOnChange}
                   onClick={handleOnClick}
                   inputProps={{
+                    id: 'activity-label-input',
                     ref: labelInputRef,
                     sx: { cursor: isLabelEditable ? 'text' : 'pointer' },
                   }}
