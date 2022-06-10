@@ -58,12 +58,7 @@ export const editorSlice = createSlice({
       state.selectedElement = null;
     },
     selectElement: (state, action: PayloadAction<Aid | null>) => {
-      const aid = action.payload;
-      if (!aid) {
-        state.selectedElement = null;
-      } else {
-        state.selectedElement = aid;
-      }
+      state.selectedElement = null;
     },
     changeTitle: (state, action: PayloadAction<string>) => {
       state.graph.metaData.name = action.payload;
