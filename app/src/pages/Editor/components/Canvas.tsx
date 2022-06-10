@@ -28,7 +28,7 @@ export const Canvas = () => {
         width: '100%',
       }}
     >
-      {graph && graph.activies.map((activity) => <Activity key={activity.aid} {...activity} />)}
+      {graph && graph.activities.map((activity) => <Activity key={activity.aid} {...activity} />)}
     </svg>
   );
 };

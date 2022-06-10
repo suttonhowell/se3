@@ -13,6 +13,9 @@ import { ButtonDropDown, DropDownItemProps } from '../../../components/navigatio
 import { ToolbarButton } from '../../../components/navigation/ToolbarButton';
 import { ToolbarButtonGroup } from '../../../components/navigation/ToolbarButtonGroup';
 import { useIterNumberArray } from '../../../core/hooks/useIterArray';
+import { useAppDispatch, useAppSelector } from '../../../core/redux/hooks';
+import { deleteActivity } from '../../../core/redux/features/editor/editorSlice';
+import { useSelector } from 'react-redux';
 
 // Increments used for zoom in and out
 const zoomLevelsIncrements = [
@@ -29,11 +32,12 @@ const zoomItemList: DropDownItemProps[] = zoomList.map((item) => ({
 }));
 
 export const TopToolbar = () => {
+  const hasSelected = useAppSelector((state) => state.editor.selectedElement != null);
   const [hasHistory, setHasHistory] = useState(false);
-  const [hasSelected, setHasSelected] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(100);
   const [isRelationToolActive, setIsRelationToolActive] = useState(false);
   const [predecessor, successor] = useIterNumberArray(zoomLevelsIncrements, 100);
+  const dispatch = useAppDispatch();
 
   const handleOnClickUndo = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setHasHistory((prevState) => !prevState);
@@ -56,7 +60,7 @@ export const TopToolbar = () => {
   };
 
   const handleOnClickDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    setHasSelected((prevState) => !prevState);
+    dispatch(deleteActivity());
   };
 
   const handleOnClickRelationTool = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -115,7 +119,7 @@ export const TopToolbar = () => {
         <ToolbarButtonGroup>
           <ToolbarButton
             tooltipTitle="Delete selected"
-            disabledCondition={hasSelected}
+            disabledCondition={!hasSelected}
             children={<DeleteIcon />}
             onClick={handleOnClickDelete}
           />
