@@ -19,9 +19,8 @@ const handleOnClickCreateNewGraph = () => {
 };
 
 const handleOnClickOpenGraph = async () => {
-  const filePath = await window.fileApi.openFile();
   //filepath contains the "jsonified" version of the graph
-  console.log(filePath);
+  const filePath = await window.fileApi.openFile();
   //convert back to graph
   if (filePath) dispatch(openGraph(filePath));
 
@@ -41,11 +40,11 @@ const startMenuItems: StartMenuItemProps[] = [
     navigateTo: '/editor',
     clickAction: handleOnClickCreateNewGraph,
   },
-  { 
-    label: 'Open graph...', 
-    icon: <OpenIcon />, 
+  {
+    label: 'Open graph...',
+    icon: <OpenIcon />,
     navigateTo: '/editor',
-    clickAction: handleOnClickOpenGraph, 
+    clickAction: handleOnClickOpenGraph,
   },
 ];
 

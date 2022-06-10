@@ -32,8 +32,27 @@ export const editorSlice = createSlice({
       };
     },
     openGraph: (state, action: PayloadAction<string>) => {
-      const graph = JSON.parse(action.payload);
-      state.graph = graph;
+
+      function idsAreDistinct(ids: [Aid]): boolean {
+        return false;
+      }
+
+      function relationsPointToexistingActivities(g: DCRGraph): boolean {
+        return false;
+      }
+
+      function isValidDCRGraph(g: DCRGraph): boolean {
+        console.log(g.activies.map((activity) => { return activity.relations }));
+        return idsAreDistinct(["1"]) && relationsPointToexistingActivities(g)
+      }
+
+      try {
+        const graph: DCRGraph = JSON.parse(action.payload);
+        if (isValidDCRGraph(graph)) state.graph = graph;
+        else throw new Error("Unvalid DCR Graph")
+      } catch (error) {
+        alert("The file you chose doesn't contain a valid DCR graph: " + error.message);
+      }
     },
     addActivity: (state) => {
       state.graph?.activies.push({

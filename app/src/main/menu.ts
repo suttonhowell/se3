@@ -40,7 +40,6 @@ export const menuTemplate: (Electron.MenuItemConstructorOptions | Electron.MenuI
         click() {
           console.log('Save was clicked\n');
           const graph = store.getState().editor.graph;
-          console.log(graph);
           if (graph !== undefined) saveGraph(graph);
         },
       }, //end of Save
