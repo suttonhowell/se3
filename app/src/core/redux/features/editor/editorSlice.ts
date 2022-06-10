@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { List } from 'reselect/es/types';
 import { v4 as uuidv4 } from 'uuid';
 import { Aid, DCRGraph, Position } from '../../../models/DCRGraph';
 
@@ -33,17 +34,17 @@ export const editorSlice = createSlice({
     },
     openGraph: (state, action: PayloadAction<string>) => {
 
-      function idsAreDistinct(ids: [Aid]): boolean {
-        return false;
+      function idsAreDistinct(ids: Array<string>): boolean {
+        return JSON.stringify(ids.sort()) == JSON.stringify((ids.filter((value, index, self) => { return self.indexOf(value) == index })).sort())
       }
 
       function relationsPointToexistingActivities(g: DCRGraph): boolean {
-        return false;
+        // TODO: implement when relations functionality is finished and merged
+        return true;
       }
 
       function isValidDCRGraph(g: DCRGraph): boolean {
-        console.log(g.activities.map((activity) => { return activity.relations }));
-        return idsAreDistinct(["1"]) && relationsPointToexistingActivities(g)
+        return (idsAreDistinct(g.activities.map((a) => { return a.aid }))) && relationsPointToexistingActivities(g)
       }
 
       try {
@@ -105,6 +106,7 @@ export const editorSlice = createSlice({
 
 export const {
   createNewGraph,
+  openGraph,
   addActivity,
   deleteActivity,
   selectElement,
