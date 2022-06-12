@@ -38,19 +38,19 @@ export const editorSlice = createSlice({
         return JSON.stringify(ids.sort()) == JSON.stringify((ids.filter((value, index, self) => { return self.indexOf(value) == index })).sort())
       }
 
-      function relationsPointToexistingActivities(g: DCRGraph): boolean {
+      function relationsPointToExistingActivities(g: DCRGraph): boolean {
         // TODO: implement when relations functionality is finished and merged
         return true;
       }
 
       function isValidDCRGraph(g: DCRGraph): boolean {
-        return (idsAreDistinct(g.activities.map((a) => { return a.aid }))) && relationsPointToexistingActivities(g)
+        return (idsAreDistinct(g.activities.map((a) => { return a.aid }))) && relationsPointToExistingActivities(g)
       }
 
       try {
         const graph: DCRGraph = JSON.parse(action.payload);
         if (isValidDCRGraph(graph)) state.graph = graph;
-        else throw new Error("Unvalid DCR Graph")
+        else throw new Error("Invalid DCR Graph")
       } catch (error) {
         alert("The file you chose doesn't contain a valid DCR graph: " + error.message);
       }
