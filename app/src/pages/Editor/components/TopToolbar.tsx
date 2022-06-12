@@ -50,9 +50,7 @@ export const TopToolbar = () => {
     setHasHistory((prevState) => !prevState);
   };
 
-  const handleOnClickHistory = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    console.log('See change history button was clicked');
-  };
+  const handleOnClickHistory = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => { };
 
   const handleOnClickZoomIn = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setZoomLevel(successor(zoomLevel));
