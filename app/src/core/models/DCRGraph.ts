@@ -25,7 +25,7 @@ export interface Activity {
   markings: Markings;
   style: ActivityStyle;
   relations: Relation[];
-  parrent: Aid | null;
+  parent: Aid | null;
   nestedActivities: Activity[];
 }
 

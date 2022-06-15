@@ -45,7 +45,7 @@ export const editorSlice = createSlice({
           textColor: '#000000',
         },
         relations: [],
-        parrent: null,
+        parent: null,
         nestedActivities: [],
       });
     },
