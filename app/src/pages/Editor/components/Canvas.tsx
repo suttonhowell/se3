@@ -18,6 +18,7 @@ export const Canvas = () => {
 
   const handleOnClick = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     const target = e.target as SVGElement;
+    console.log(target);
     const targetIsActivity = target.classList.contains('activity');
     if (isAddingRelation && targetIsActivity) {
       dispatch(addRelation(target.id));
@@ -59,7 +60,6 @@ export const Canvas = () => {
       {graph.activities.map((activity) => (
         <Activity key={activity.aid} {...activity} />
       ))}
-      {/* <ArrowHead position={{ x: 100, y: 100 }} rotateDeg={90} color="#FFF" /> */}
     </svg>
   );
 };

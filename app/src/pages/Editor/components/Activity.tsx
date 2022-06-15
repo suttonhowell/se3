@@ -1,5 +1,4 @@
 import { Box } from '@mui/system';
-import { getActivityRelationPoints } from '../../../core/models/Activity';
 import {
   activityHeaderHeight,
   activityHeight,
@@ -9,6 +8,7 @@ import {
   relationToColor,
 } from '../../../core/constants';
 import { Activity as ActivityType, Position } from '../../../core/models';
+import { getActivityRelationPoints } from '../../../core/models/Activity';
 import { ToolType } from '../../../core/redux/features/editor/editorSlice';
 import { useAppSelector } from '../../../core/redux/hooks';
 import { RelationToOther } from './RelationToOther';
@@ -35,8 +35,8 @@ export const Activity = (props: ActivityProps) => {
   if (activity) {
     points = getActivityRelationPoints(activity);
   }
-  console.log(props.position.x, props.position.y);
-  console.log(points);
+  // console.log(props.position.x, props.position.y);
+  // console.log(points);
 
   return (
     <>
@@ -45,8 +45,8 @@ export const Activity = (props: ActivityProps) => {
         transform={`translate(${props.position.x},${props.position.y})`}
       >
         <Box
-          component="rect"
           id={props.aid}
+          component="rect"
           className="draggable activity"
           sx={{
             cursor: isAddingRelation ? 'copy' : 'move',
@@ -63,7 +63,7 @@ export const Activity = (props: ActivityProps) => {
           ry="10"
           width={activityWidth}
           height={activityHeight}
-          stroke={selectedElement?.aid === props.aid ? 'blue' : props.style.borderColor}
+          stroke={selectedElement === props.aid ? 'blue' : props.style.borderColor}
           fill={props.style.bgColor}
         />
         <path
@@ -84,9 +84,15 @@ export const Activity = (props: ActivityProps) => {
         >
           {props.label}
         </text>
-        {
-          points.map((point) => (<circle key={point.x + ',' + point.y} cx={point.x - props.position.x} cy={point.y - props.position.y} r="5" fill="red" />))
-        }
+        {points.map((point) => (
+          <circle
+            key={point.x + ',' + point.y}
+            cx={point.x - props.position.x}
+            cy={point.y - props.position.y}
+            r="5"
+            fill="red"
+          />
+        ))}
         {props.relationsToSelf.map((rs, idx) => (
           <RelationToSelf
             key={rs.rid}

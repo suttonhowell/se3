@@ -37,7 +37,14 @@ type UseDragSVGElementHook = [
 
 export const useDragSVGElement = (): UseDragSVGElementHook => {
   const dispatch = useDispatch();
-  const selectedElement = useAppSelector((state) => state.editor.selectedElement);
+  const selectedElement = useAppSelector((state) => {
+    const aid = state.editor.selectedElement;
+    if (aid) {
+      return state.editor.graph.activities.find((a) => a.aid == aid);
+    } else {
+      return null;
+    }
+  });
   const canvasRef = useRef<SVGSVGElement>(null);
   const [aid, setAid] = useState<string>('');
   const [draggedElement, setDraggedElement] = useState<(EventTarget & SVGElement) | null>(null);

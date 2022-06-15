@@ -1,4 +1,3 @@
-import { getActivityRelationPoints } from '../../../core/models/Activity';
 import {
   activityHeight,
   activityWidth,
@@ -8,6 +7,7 @@ import {
   relationVectorShorteningResponse,
 } from '../../../core/constants';
 import { Position, RelationToOther as RelationToOtherModel } from '../../../core/models';
+import { getActivityRelationPoints } from '../../../core/models/Activity';
 import { getRelationColor, hasDot, RelationType } from '../../../core/models/Relations';
 import { useAppSelector } from '../../../core/redux/hooks';
 import { getUnitVector, getVectorAngle, getVectorLength } from '../../../core/utils/svgUtils';
@@ -49,12 +49,16 @@ export const RelationToOther = (props: RelationToOtherProps) => {
     }
   }
 
+  console.log(fromActivity, toActivity);
+
   if (!fromActivity || !toActivity) {
     return <></>;
   }
 
   const fromPositions = getActivityRelationPoints(fromActivity);
   const toPositions = getActivityRelationPoints(toActivity);
+
+  // console.log(fromPositions, toPositions);
 
   const combinedPositions = [];
 
@@ -68,6 +72,8 @@ export const RelationToOther = (props: RelationToOtherProps) => {
     }
   }
 
+  // console.log(combinedPositions);
+
   let shortest = combinedPositions[0];
 
   for (let i = 0; i < combinedPositions.length; i++) {
@@ -75,6 +81,8 @@ export const RelationToOther = (props: RelationToOtherProps) => {
       shortest = combinedPositions[i];
     }
   }
+
+  // console.log(shortest);
 
   const { x: x1, y: y1 } = shortest.from;
 

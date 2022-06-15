@@ -10,7 +10,7 @@ export interface DCRGraph {
 export const initialDCRGraph: DCRGraph = {
   activities: [],
   metaData: {
-    name: 'Untitled',
+    name: 'Untitled.dcr',
   },
 };
 

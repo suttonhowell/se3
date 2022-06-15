@@ -3,6 +3,7 @@ import {
   DeleteRounded as DeleteIcon,
   HistoryRounded as HistoryIcon,
   RedoRounded as RedoIcon,
+  SaveRounded as SaveIcon,
   UndoRounded as UndoIcon,
   ZoomInRounded as ZoomInIcon,
   ZoomOutRounded as ZoomOutIcon,
@@ -13,8 +14,14 @@ import { ButtonDropDown, DropDownItemProps } from '../../../components/navigatio
 import { ToolbarButton } from '../../../components/navigation/ToolbarButton';
 import { ToolbarButtonGroup } from '../../../components/navigation/ToolbarButtonGroup';
 import { useIterNumberArray } from '../../../core/hooks/useIterArray';
-import { pickTool, ToolType } from '../../../core/redux/features/editor/editorSlice';
+import {
+  deleteActivity,
+  pickTool,
+  ToolType,
+} from '../../../core/redux/features/editor/editorSlice';
 import { useAppDispatch, useAppSelector } from '../../../core/redux/hooks';
+import { store } from '../../../core/redux/store';
+import { saveGraphIPC } from '../../../core/utils/graphUtilsIPC';
 
 // Increments used for zoom in and out
 const zoomLevelsIncrements = [
@@ -32,12 +39,12 @@ const zoomItemList: DropDownItemProps[] = zoomList.map((item) => ({
 
 export const TopToolbar = () => {
   const dispatch = useAppDispatch();
-  const { isRelationToolActive, hasActivities } = useAppSelector((state) => ({
+  const { isRelationToolActive, hasActivities, hasSelected } = useAppSelector((state) => ({
     isRelationToolActive: state.editor.usingTool === ToolType.AddRelation,
     hasActivities: state.editor.graph.activities.length > 0,
+    hasSelected: state.editor.selectedElement != null,
   }));
   const [hasHistory, setHasHistory] = useState(false);
-  const [hasSelected, setHasSelected] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(100);
   const [predecessor, successor] = useIterNumberArray(zoomLevelsIncrements, 100);
 
@@ -49,9 +56,7 @@ export const TopToolbar = () => {
     setHasHistory((prevState) => !prevState);
   };
 
-  const handleOnClickHistory = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    console.log('See change history button was clicked');
-  };
+  const handleOnClickHistory = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {};
 
   const handleOnClickZoomIn = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setZoomLevel(successor(zoomLevel));
@@ -62,7 +67,7 @@ export const TopToolbar = () => {
   };
 
   const handleOnClickDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    setHasSelected((prevState) => !prevState);
+    dispatch(deleteActivity());
   };
 
   const handleOnClickRelationTool = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -73,6 +78,11 @@ export const TopToolbar = () => {
 
   const handleOnZoomLevelClick = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     setZoomLevel(e.currentTarget.value);
+  };
+
+  const handleOnClickSave = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const graph = store.getState().editor.graph;
+    if (graph !== undefined) saveGraphIPC(window, graph);
   };
 
   return (
@@ -123,12 +133,12 @@ export const TopToolbar = () => {
         <ToolbarButtonGroup>
           <ToolbarButton
             tooltipTitle="Delete selected"
-            disabledCondition={hasSelected}
+            disabledCondition={!hasSelected}
             children={<DeleteIcon />}
             onClick={handleOnClickDelete}
           />
         </ToolbarButtonGroup>
-        <ToolbarButtonGroup disableDivider>
+        <ToolbarButtonGroup>
           <ToolbarButton
             tooltipTitle={
               (isRelationToolActive ? 'Deactivate' : 'Activate') + '"Add relation tool"'
@@ -138,6 +148,13 @@ export const TopToolbar = () => {
             // TODO: Find a better suited icon for this button
             children={<RelationToolIcon />}
             onClick={handleOnClickRelationTool}
+          />
+        </ToolbarButtonGroup>
+        <ToolbarButtonGroup disableDivider>
+          <ToolbarButton
+            tooltipTitle="Save as file"
+            children={<SaveIcon />}
+            onClick={handleOnClickSave}
           />
         </ToolbarButtonGroup>
       </Toolbar>
