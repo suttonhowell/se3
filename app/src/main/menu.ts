@@ -1,4 +1,6 @@
 import { app } from 'electron';
+import { store } from '../core/redux/store';
+import { saveGraph } from '../core/utils/graphUtils';
 
 const isMac = process.platform === 'darwin';
 const isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
@@ -30,13 +32,13 @@ export const menuTemplate: (Electron.MenuItemConstructorOptions | Electron.MenuI
       {
         label: 'Open',
         click() {
-          console.log('Open was clicked\n');
         },
       }, //end of Open
       {
         label: 'Save',
         click() {
-          console.log('Save was clicked\n');
+          const graph = store.getState().editor.graph;
+          if (graph !== undefined) saveGraph(graph);
         },
       }, //end of Save
       ...(isMac
@@ -44,7 +46,6 @@ export const menuTemplate: (Electron.MenuItemConstructorOptions | Electron.MenuI
         : [{
           label: 'Exit',
           click() {
-            console.log('Exit was clicked\nExiting...\n');
             app.quit();
           },
         }]), //end of Exit
@@ -55,15 +56,11 @@ export const menuTemplate: (Electron.MenuItemConstructorOptions | Electron.MenuI
     submenu: [
       {
         label: 'Undo',
-        click() {
-          console.log('Undo was clicked\n');
-        },
+        click() { },
       }, //end of Undo
       {
         label: 'Redo',
-        click() {
-          console.log('Redo was clicked\n');
-        },
+        click() { },
       }, //end of Redo
     ],
   }, //end of Edit submenu
@@ -72,15 +69,11 @@ export const menuTemplate: (Electron.MenuItemConstructorOptions | Electron.MenuI
     submenu: [
       {
         label: 'Option 1',
-        click() {
-          console.log('Option 1 (Format) was clicked\n');
-        },
+        click() { },
       }, //end of Option 1
       {
         label: 'Option 2',
-        click() {
-          console.log('Option 2 (Format) was clicked\n');
-        },
+        click() { },
       }, //end of Option 2
     ],
   }, //end of Format submenu
@@ -89,15 +82,11 @@ export const menuTemplate: (Electron.MenuItemConstructorOptions | Electron.MenuI
     submenu: [
       {
         label: 'Option 1',
-        click() {
-          console.log('Option 1 (Settings) was clicked\n');
-        },
+        click() { },
       }, //end of Option 1
       {
         label: 'Option 2',
-        click() {
-          console.log('Option 2 (Settings) was clicked\n');
-        },
+        click() { },
       }, //end of Option 2
     ],
   }, //end of Settings submenu

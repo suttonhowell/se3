@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { List } from 'reselect/es/types';
 import { v4 as uuidv4 } from 'uuid';
 import { Aid, DCRGraph, Position } from '../../../models/DCRGraph';
 
@@ -30,6 +31,29 @@ export const editorSlice = createSlice({
           name: 'Untitled.dcr',
         },
       };
+    },
+    openGraph: (state, action: PayloadAction<string>) => {
+
+      function idsAreDistinct(ids: Array<string>): boolean {
+        return JSON.stringify(ids.sort()) == JSON.stringify((ids.filter((value, index, self) => { return self.indexOf(value) == index })).sort())
+      }
+
+      function relationsPointToExistingActivities(g: DCRGraph): boolean {
+        // TODO: implement when relations functionality is finished and merged
+        return true;
+      }
+
+      function isValidDCRGraph(g: DCRGraph): boolean {
+        return (idsAreDistinct(g.activities.map((a) => { return a.aid }))) && relationsPointToExistingActivities(g)
+      }
+
+      try {
+        const graph: DCRGraph = JSON.parse(action.payload);
+        if (isValidDCRGraph(graph)) state.graph = graph;
+        else throw new Error("Invalid DCR Graph")
+      } catch (error) {
+        alert("The file you chose doesn't contain a valid DCR graph: " + error.message);
+      }
     },
     addActivity: (state) => {
       state.graph.activities.push({
@@ -82,6 +106,7 @@ export const editorSlice = createSlice({
 
 export const {
   createNewGraph,
+  openGraph,
   addActivity,
   deleteActivity,
   selectElement,
