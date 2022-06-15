@@ -3,10 +3,10 @@ import {
   DeleteRounded as DeleteIcon,
   HistoryRounded as HistoryIcon,
   RedoRounded as RedoIcon,
+  SaveRounded as SaveIcon,
   UndoRounded as UndoIcon,
   ZoomInRounded as ZoomInIcon,
   ZoomOutRounded as ZoomOutIcon,
-  SaveRounded as SaveIcon,
 } from '@mui/icons-material';
 import { AppBar, Toolbar } from '@mui/material';
 import React, { useState } from 'react';
@@ -14,11 +14,10 @@ import { ButtonDropDown, DropDownItemProps } from '../../../components/navigatio
 import { ToolbarButton } from '../../../components/navigation/ToolbarButton';
 import { ToolbarButtonGroup } from '../../../components/navigation/ToolbarButtonGroup';
 import { useIterNumberArray } from '../../../core/hooks/useIterArray';
-import { store } from '../../../core/redux/store';
-import { saveGraphIPC } from '../../../core/utils/graphUtilsIPC'
-import { useAppDispatch, useAppSelector } from '../../../core/redux/hooks';
 import { deleteActivity } from '../../../core/redux/features/editor/editorSlice';
-import { useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../core/redux/hooks';
+import { store } from '../../../core/redux/store';
+import { saveGraphIPC } from '../../../core/utils/graphUtilsIPC';
 
 // Increments used for zoom in and out
 const zoomLevelsIncrements = [
@@ -50,7 +49,7 @@ export const TopToolbar = () => {
     setHasHistory((prevState) => !prevState);
   };
 
-  const handleOnClickHistory = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => { };
+  const handleOnClickHistory = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {};
 
   const handleOnClickZoomIn = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setZoomLevel(successor(zoomLevel));
@@ -75,7 +74,7 @@ export const TopToolbar = () => {
   const handleOnClickSave = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const graph = store.getState().editor.graph;
     if (graph !== undefined) saveGraphIPC(window, graph);
-  }
+  };
 
   return (
     <AppBar position="relative" color="inherit" elevation={4}>

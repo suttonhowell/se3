@@ -11,7 +11,14 @@ export const Editor = () => {
 
   const onKeyPress = (e: KeyboardEvent) => {
     const key = e.key;
-    if (key === 'Delete' || key === 'Backspace') {
+    const titleInputRef = document.getElementById('title-input');
+    const activityLabelInputRef = document.getElementById('activity-label-input');
+    const activeElement = document.activeElement;
+    if (
+      (key === 'Delete' || key === 'Backspace') &&
+      activeElement !== activityLabelInputRef &&
+      activeElement !== titleInputRef
+    ) {
       dispatch(deleteActivity());
     }
   };

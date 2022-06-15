@@ -1,6 +1,6 @@
 import { EditRounded, SaveAsRounded } from '@mui/icons-material';
 import { Box, IconButton, InputAdornment, TextField, Tooltip } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { changeTitle } from '../../core/redux/features/editor/editorSlice';
 import { useAppDispatch, useAppSelector } from '../../core/redux/hooks';
 
@@ -12,6 +12,14 @@ export const ProjectTitle = () => {
   const [title, setTitle] = useState<string>(titleName);
   const [isTitleEditable, setIsTitleEditable] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
+
+  const titleInputRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isTitleEditable && titleInputRef.current) {
+      titleInputRef.current.focus();
+    }
+  }, [isTitleEditable]);
 
   // Update title when redux state changes
   useEffect(() => {
@@ -58,6 +66,7 @@ export const ProjectTitle = () => {
             size="small"
             onChange={handleOnChange}
             sx={{ input: { color: 'white' } }}
+            inputProps={{ id: 'title-input', ref: titleInputRef }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">

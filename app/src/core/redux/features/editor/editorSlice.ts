@@ -1,12 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { List } from 'reselect/es/types';
 import { v4 as uuidv4 } from 'uuid';
-import { Aid, DCRGraph, Position } from '../../../models/DCRGraph';
+import { ActivityStyle, Aid, DCRGraph, Markings, Position } from '../../../models/DCRGraph';
 
 interface EditorState {
   graph: DCRGraph;
   selectedElement: Aid | null;
-  offset: Position | null;
 }
 
 const initialState: EditorState = {
@@ -17,7 +16,6 @@ const initialState: EditorState = {
     },
   },
   selectedElement: null,
-  offset: null,
 };
 
 export const editorSlice = createSlice({
@@ -66,11 +64,12 @@ export const editorSlice = createSlice({
           executed: false,
         },
         style: {
-          borderColor: 'black',
-          bgColor: 'white',
-          textColor: 'black',
+          borderColor: '#000000',
+          bgColor: '#ffffff',
+          textColor: '#000000',
         },
         relations: [],
+        parent: null,
         nestedActivities: [],
       });
     },
@@ -85,19 +84,45 @@ export const editorSlice = createSlice({
     selectElement: (state, action: PayloadAction<Aid | null>) => {
       state.selectedElement = action.payload;
     },
-    setOffset: (state, action: PayloadAction<Position | null>) => {
-      state.offset = action.payload;
-    },
     changeTitle: (state, action: PayloadAction<string>) => {
-      if (state.graph) {
-        state.graph.metaData.name = action.payload;
-      }
+      state.graph.metaData.name = action.payload;
+    },
+    changeActivityLabel: (state, action: PayloadAction<{ label: string; aid: string | null }>) => {
+      const { label, aid } = action.payload;
+      const updatedActivities = state.graph.activities.map((activity) =>
+        activity.aid !== aid ? activity : { ...activity, label }
+      );
+      state.graph.activities = updatedActivities;
     },
     moveActivity: (state, action: PayloadAction<{ aid: Aid; position: Position }>) => {
       const updatedActivities = state.graph.activities.map((activity) =>
         activity.aid !== action.payload.aid
           ? activity
           : { ...activity, position: action.payload.position }
+      );
+      state.graph.activities = updatedActivities;
+    },
+    changeStyle: (
+      state,
+      action: PayloadAction<{ styleProp: keyof ActivityStyle; color: string; aid: Aid }>
+    ) => {
+      const { styleProp, color, aid } = action.payload;
+      const updatedActivities = state.graph.activities.map((activity) =>
+        activity.aid !== aid
+          ? activity
+          : { ...activity, style: { ...activity.style, [styleProp]: color } }
+      );
+      state.graph.activities = updatedActivities;
+    },
+    changeMarking: (
+      state,
+      action: PayloadAction<{ markingsProp: keyof Markings; value: boolean; aid: Aid }>
+    ) => {
+      const { markingsProp, value, aid } = action.payload;
+      const updatedActivities = state.graph.activities.map((activity) =>
+        activity.aid !== aid
+          ? activity
+          : { ...activity, markings: { ...activity.markings, [markingsProp]: value } }
       );
       state.graph.activities = updatedActivities;
     },
@@ -108,11 +133,13 @@ export const {
   createNewGraph,
   openGraph,
   addActivity,
-  deleteActivity,
-  selectElement,
-  setOffset,
   changeTitle,
   moveActivity,
+  changeActivityLabel,
+  changeMarking,
+  changeStyle,
+  deleteActivity,
+  selectElement,
 } = editorSlice.actions;
 
 export default editorSlice.reducer;

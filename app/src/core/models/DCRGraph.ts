@@ -6,24 +6,43 @@ export interface DCRGraph {
   };
 }
 
+export interface ActivityStyle {
+  borderColor: string;
+  textColor: string;
+  bgColor: string;
+}
+
+export interface Markings {
+  included: boolean;
+  pending: boolean;
+  executed: boolean;
+}
+
 export interface Activity {
   aid: Aid;
   label: string;
   position: Position;
-  markings: {
-    pending: boolean;
-    included: boolean;
-    executed: boolean;
-  };
-  style: {
-    borderColor: string;
-    textColor: string;
-    bgColor: string;
-  };
+  markings: Markings;
+  style: ActivityStyle;
   relations: Relation[];
-  parrent?: Aid;
+  parent: Aid | null;
   nestedActivities: Activity[];
 }
+
+export const isActivity = (obj: any): obj is Activity => {
+  return (
+    obj !== undefined &&
+    obj !== null &&
+    'aid' in obj &&
+    'label' in obj &&
+    'position' in obj &&
+    'markings' in obj &&
+    'style' in obj &&
+    'relations' in obj &&
+    'parent' in obj &&
+    'nestedActivities' in obj
+  );
+};
 
 export type Aid = string;
 enum RelationType {
