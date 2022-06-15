@@ -39,7 +39,7 @@ export const isActivity = (obj: any): obj is Activity => {
     'markings' in obj &&
     'style' in obj &&
     'relations' in obj &&
-    'parrent' in obj &&
+    'parent' in obj &&
     'nestedActivities' in obj
   );
 };

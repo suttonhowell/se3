@@ -3,6 +3,7 @@ import {
   DeleteRounded as DeleteIcon,
   HistoryRounded as HistoryIcon,
   RedoRounded as RedoIcon,
+  SaveRounded as SaveIcon,
   UndoRounded as UndoIcon,
   ZoomInRounded as ZoomInIcon,
   ZoomOutRounded as ZoomOutIcon,
@@ -15,6 +16,8 @@ import { ToolbarButtonGroup } from '../../../components/navigation/ToolbarButton
 import { useIterNumberArray } from '../../../core/hooks/useIterArray';
 import { deleteActivity } from '../../../core/redux/features/editor/editorSlice';
 import { useAppDispatch, useAppSelector } from '../../../core/redux/hooks';
+import { store } from '../../../core/redux/store';
+import { saveGraphIPC } from '../../../core/utils/graphUtilsIPC';
 
 // Increments used for zoom in and out
 const zoomLevelsIncrements = [
@@ -46,9 +49,7 @@ export const TopToolbar = () => {
     setHasHistory((prevState) => !prevState);
   };
 
-  const handleOnClickHistory = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    console.log('See change history button was clicked');
-  };
+  const handleOnClickHistory = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {};
 
   const handleOnClickZoomIn = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setZoomLevel(successor(zoomLevel));
@@ -68,6 +69,11 @@ export const TopToolbar = () => {
 
   const handleOnZoomLevelClick = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     setZoomLevel(e.currentTarget.value);
+  };
+
+  const handleOnClickSave = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const graph = store.getState().editor.graph;
+    if (graph !== undefined) saveGraphIPC(window, graph);
   };
 
   return (
@@ -123,7 +129,7 @@ export const TopToolbar = () => {
             onClick={handleOnClickDelete}
           />
         </ToolbarButtonGroup>
-        <ToolbarButtonGroup disableDivider>
+        <ToolbarButtonGroup>
           <ToolbarButton
             tooltipTitle={
               (isRelationToolActive ? 'Deactivate' : 'Activate') + '"Add relation tool"'
@@ -132,6 +138,13 @@ export const TopToolbar = () => {
             // TODO: Find a better suited icon for this button
             children={<RelationToolIcon />}
             onClick={handleOnClickRelationTool}
+          />
+        </ToolbarButtonGroup>
+        <ToolbarButtonGroup disableDivider>
+          <ToolbarButton
+            tooltipTitle="Save as file"
+            children={<SaveIcon />}
+            onClick={handleOnClickSave}
           />
         </ToolbarButtonGroup>
       </Toolbar>
