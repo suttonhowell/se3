@@ -52,6 +52,9 @@ export const editorSlice = createSlice({
     createNewGraph: (state) => {
       state.graph = initialDCRGraph;
     },
+    closeGraph: (state) => {
+      return initialState;
+    },
     openGraph: (state, action: PayloadAction<string>) => {
       function idsAreDistinct(ids: Array<string>): boolean {
         return (
@@ -219,6 +222,7 @@ export const editorSlice = createSlice({
 
 export const {
   addRelation,
+  closeGraph,
   chooseRelationType,
   pickTool,
   createNewGraph,

@@ -1,10 +1,23 @@
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import { AppBar, Box, Toolbar, Typography } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { closeGraph } from '../../core/redux/features/editor/editorSlice';
+import { useAppDispatch } from '../../core/redux/hooks';
 import { ProjectTitle } from './ProjectTitle';
 
 export const TopBar = () => {
-  var location = useLocation();
+  const location = useLocation();
+  const inEditor = location.pathname.includes('editor');
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleOnClick = (e: React.MouseEvent) => {
+    if (inEditor) {
+      navigate('/');
+      dispatch(closeGraph());
+    }
+  };
 
   return (
     <AppBar
@@ -23,11 +36,13 @@ export const TopBar = () => {
             bgcolor: '#00000040',
             borderRadius: '100%',
             display: 'flex',
+            cursor: inEditor ? 'pointer' : 'default',
           }}
+          onClick={handleOnClick}
         >
           <AccountTreeIcon fontSize="medium" />
         </Box>
-        {location.pathname.includes('editor') ? (
+        {inEditor ? (
           <ProjectTitle />
         ) : (
           <Typography variant="h5" noWrap component="div">
