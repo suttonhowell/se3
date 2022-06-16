@@ -66,13 +66,48 @@ export const ProjectTitle = () => {
             disabled={!isTitleEditable}
             size="small"
             onChange={handleOnChange}
-            sx={{ input: { color: 'white' } }}
+            sx={(theme) => ({
+              '& .MuiInputLabel-root.MuiInputLabel-formControl': {
+                color: theme.palette.common.white,
+                '&.Mui-disabled': { color: theme.palette.grey[400] },
+              },
+              '& .MuiOutlinedInput-root': {
+                color: theme.palette.common.white,
+                '&.Mui-focused, &': {
+                  '& fieldset': {
+                    borderColor: theme.palette.common.white,
+                  },
+                },
+                ...(theme.palette.mode === 'light' && {
+                  '&.Mui-disabled': {
+                    '& .MuiOutlinedInput-input': {
+                      WebkitTextFillColor: theme.palette.grey[400],
+                    },
+                    '&:hover fieldset, & fieldset': {
+                      borderColor: theme.palette.grey[400],
+                    },
+                  },
+
+                  '&:hover fieldset': {
+                    borderColor: theme.palette.common.white,
+                  },
+                }),
+              },
+            })}
+            // sx={(theme) => ({
+            //   input
+            // })}
+
             inputProps={{ id: 'title-input', ref: titleInputRef }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton onClick={handleOnClick}>
-                    {isTitleEditable ? <SaveAsRounded /> : <EditRounded />}
+                    {isTitleEditable ? (
+                      <SaveAsRounded sx={(theme) => ({ color: theme.palette.common.white })} />
+                    ) : (
+                      <EditRounded sx={(theme) => ({ color: theme.palette.common.white })} />
+                    )}
                   </IconButton>
                 </InputAdornment>
               ),

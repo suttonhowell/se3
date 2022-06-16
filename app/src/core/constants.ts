@@ -2,7 +2,7 @@
 export const activityHeight = 150;
 export const activityWidth = 100;
 export const activityHeaderHeight = 30;
-export const activityStrokeWidth = 5;
+export const activityStrokeWidth = 3;
 export const selectedActivityColor = 'blue';
 
 // Relation constants
