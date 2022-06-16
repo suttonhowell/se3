@@ -14,7 +14,7 @@ import { useAppSelector } from '../../../core/redux/hooks';
 import { RelationToOther } from './RelationToOther';
 import { RelationToSelf } from './RelationToSelf';
 
-interface ActivityProps extends ActivityType {}
+interface ActivityProps extends ActivityType { }
 
 export const Activity = (props: ActivityProps) => {
   const { selectedElement, isAddingRelation, addRelationArgs, graph } = useAppSelector((state) => ({
@@ -55,8 +55,8 @@ export const Activity = (props: ActivityProps) => {
               stroke: !isAddingRelation
                 ? undefined
                 : !addRelationArgs
-                ? relationFromColor
-                : relationToColor,
+                  ? relationFromColor
+                  : relationToColor,
             },
           }}
           rx="10"
@@ -64,14 +64,15 @@ export const Activity = (props: ActivityProps) => {
           width={activityWidth}
           height={activityHeight}
           stroke={selectedElement === props.aid ? 'blue' : props.style.borderColor}
+          strokeDasharray={!props.markings.included ? '12 4' : undefined}
           fill={props.style.bgColor}
         />
         <path
-          d={`M ${activityStrokeWidth / 2} ${activityHeaderHeight} H ${
-            activityWidth - activityStrokeWidth / 2
-          }`}
-          stroke="black"
+          d={`M ${activityStrokeWidth / 2} ${activityHeaderHeight} H ${activityWidth - activityStrokeWidth / 2
+            }`}
           pointerEvents="none"
+          strokeDasharray={!props.markings.included ? '12 4' : undefined}
+          stroke={selectedElement === props.aid ? 'blue' : props.style.borderColor}
         />
         <text
           alignmentBaseline="middle"
@@ -81,6 +82,7 @@ export const Activity = (props: ActivityProps) => {
           pointerEvents="none"
           stroke="none"
           style={{ userSelect: 'none' }}
+          fill={props.style.textColor}
         >
           {props.label}
         </text>
@@ -100,6 +102,32 @@ export const Activity = (props: ActivityProps) => {
             {...rs}
           />
         ))}
+        {props.markings.pending && (
+          <text
+            x={activityStrokeWidth + 65}
+            y={activityHeaderHeight + 25}
+            pointerEvents="none"
+            stroke="none"
+            fill={'orange'}
+            fontSize="larger"
+            style={{ userSelect: 'none' }}
+          >
+            !
+          </text>
+        )}
+        {props.markings.executed && (
+          <text
+            x={activityStrokeWidth + 75}
+            y={activityHeaderHeight + 25}
+            pointerEvents="none"
+            stroke="none"
+            fill={'green'}
+            fontSize="larger"
+            style={{ userSelect: 'none' }}
+          >
+            ✓
+          </text>
+        )}
       </g>
       {props.relationsToOthers.map((rt, idx) => (
         <RelationToOther key={rt.rid} fromAid={props.aid} toAid={rt.to} {...rt} />
