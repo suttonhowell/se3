@@ -7,14 +7,13 @@ import {
   relationFromColor,
   relationToColor,
 } from '../../../core/constants';
-import { Activity as ActivityType, Position } from '../../../core/models';
-import { getActivityRelationPoints } from '../../../core/models/Activity';
+import { Activity as ActivityType } from '../../../core/models';
 import { ToolType } from '../../../core/redux/features/editor/editorSlice';
 import { useAppSelector } from '../../../core/redux/hooks';
 import { RelationToOther } from './RelationToOther';
 import { RelationToSelf } from './RelationToSelf';
 
-interface ActivityProps extends ActivityType { }
+interface ActivityProps extends ActivityType {}
 
 export const Activity = (props: ActivityProps) => {
   const { selectedElement, isAddingRelation, addRelationArgs, graph } = useAppSelector((state) => ({
@@ -31,12 +30,10 @@ export const Activity = (props: ActivityProps) => {
       break;
     }
   }
-  let points: Position[] = [];
-  if (activity) {
-    points = getActivityRelationPoints(activity);
-  }
-  // console.log(props.position.x, props.position.y);
-  // console.log(points);
+  // let points: Position[] = [];
+  // if (activity) {
+  //   points = getActivityRelationPoints(activity);
+  // }
 
   return (
     <>
@@ -55,8 +52,8 @@ export const Activity = (props: ActivityProps) => {
               stroke: !isAddingRelation
                 ? undefined
                 : !addRelationArgs
-                  ? relationFromColor
-                  : relationToColor,
+                ? relationFromColor
+                : relationToColor,
             },
           }}
           rx="10"
@@ -68,8 +65,9 @@ export const Activity = (props: ActivityProps) => {
           fill={props.style.bgColor}
         />
         <path
-          d={`M ${activityStrokeWidth / 2} ${activityHeaderHeight} H ${activityWidth - activityStrokeWidth / 2
-            }`}
+          d={`M ${activityStrokeWidth / 2} ${activityHeaderHeight} H ${
+            activityWidth - activityStrokeWidth / 2
+          }`}
           pointerEvents="none"
           strokeDasharray={!props.markings.included ? '12 4' : undefined}
           stroke={selectedElement === props.aid ? 'blue' : props.style.borderColor}
@@ -86,7 +84,7 @@ export const Activity = (props: ActivityProps) => {
         >
           {props.label}
         </text>
-        {points.map((point) => (
+        {/* {points.map((point) => (
           <circle
             key={point.x + ',' + point.y}
             cx={point.x - props.position.x}
@@ -94,7 +92,7 @@ export const Activity = (props: ActivityProps) => {
             r="5"
             fill="red"
           />
-        ))}
+        ))} */}
         {props.relationsToSelf.map((rs, idx) => (
           <RelationToSelf
             key={rs.rid}

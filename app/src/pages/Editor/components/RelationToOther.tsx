@@ -49,8 +49,6 @@ export const RelationToOther = (props: RelationToOtherProps) => {
     }
   }
 
-  console.log(fromActivity, toActivity);
-
   if (!fromActivity || !toActivity) {
     return <></>;
   }

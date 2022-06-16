@@ -18,7 +18,6 @@ export const Canvas = () => {
 
   const handleOnClick = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     const target = e.target as SVGElement;
-    console.log(target);
     const targetIsActivity = target.classList.contains('activity');
     if (isAddingRelation && targetIsActivity) {
       dispatch(addRelation(target.id));

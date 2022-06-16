@@ -113,7 +113,6 @@ export const editorSlice = createSlice({
       state.graph.activities = updatedActivities;
     },
     moveActivity: (state, action: PayloadAction<{ aid: Aid; position: Position }>) => {
-      console.log('moving activity', action.payload);
       const updatedActivities = state.graph.activities.map((activity) =>
         activity.aid !== action.payload.aid
           ? activity
