@@ -1,11 +1,12 @@
-import { DCRGraph } from '../models/DCRGraph';
 import { dialog } from 'electron';
 import fs from 'fs';
+import { DCRGraph } from '../models/DCRGraph';
 
 export const openFile = async () => {
   const { canceled, filePaths } = await dialog.showOpenDialog({
     title: 'Choose graph file',
-    buttonLabel: 'Open graph'
+    buttonLabel: 'Open graph',
+    filters: [{ name: 'DCR', extensions: ['dcr'] }],
   });
   if (canceled) {
     return;
@@ -18,24 +19,22 @@ export const saveFile = async (content: string) => {
   const { canceled, filePath } = await dialog.showSaveDialog({
     title: 'Save graph to file',
     buttonLabel: 'Save graph',
-    filters: [
-      { name: 'All Files', extensions: ['*'] }
-    ]
+    filters: [{ name: 'DCR', extensions: ['dcr'] }],
   });
   if (canceled || filePath == undefined) {
     return;
   } else {
-    fs.writeFile(filePath, content, {}, () => { });
+    fs.writeFile(filePath, content, {}, () => {});
   }
-}
+};
 
-// use in the main process 
+// use in the main process
 export async function saveGraph(graph: DCRGraph) {
   const graphJSON = JSON.stringify(graph);
   await saveFile(graphJSON);
 }
 
-// use in the main process 
+// use in the main process
 export async function loadGraph() {
   return await openFile();
 }
