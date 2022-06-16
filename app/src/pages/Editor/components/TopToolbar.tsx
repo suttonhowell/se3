@@ -144,7 +144,7 @@ export const TopToolbar = () => {
         </ToolbarButtonGroup>
         <ToolbarButtonGroup>
           <ToolbarButton
-            tooltipTitle="Delete selected (Delete/Backspace)"
+            tooltipTitle="Delete (Delete/Backspace)"
             disabledCondition={!hasSelected}
             children={<DeleteIcon />}
             onClick={handleOnClickDelete}
@@ -154,7 +154,7 @@ export const TopToolbar = () => {
           <ToolbarButton
             tooltipTitle={
               isRelationToolActive
-                ? 'Deactivate "Add relation tool" (Esacpe)'
+                ? 'Deactivate "Add relation tool" (Escape)'
                 : 'Activate "Add relation tool"'
             }
             disabledCondition={!hasActivities}
