@@ -1,7 +1,5 @@
 import { Box, useTheme } from '@mui/material';
 import {
-  activityHeight,
-  activityWidth,
   circleRadius,
   relationStrokeWidth,
   relationVectorShortening,
@@ -24,6 +22,7 @@ interface RelationToOtherProps extends RelationToOtherModel {
   // fromPosition: Position;
   fromAid: string;
   toAid: string;
+  index: number;
 }
 
 interface RectSides {
@@ -33,27 +32,34 @@ interface RectSides {
   right: number;
 }
 
+interface RelationsPostions {
+  from: Position;
+  to: Position;
+  distance: number;
+}
+
+const compare = (a: RelationsPostions, b: RelationsPostions) => {
+  if (a.distance < b.distance) {
+    return -1;
+  }
+  if (a.distance > b.distance) {
+    return 1;
+  }
+  return 0;
+};
+
 export const RelationToOther = (props: RelationToOtherProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const { graph, selectedElement, isAddingRelation } = useAppSelector((state) => ({
-    graph: state.editor.graph,
-    selectedElement: state.editor.selectedElement,
-    isAddingRelation: state.editor.usingTool === ToolType.AddRelation,
-  }));
-
-  let fromActivity = null;
-  let toActivity = null;
-
-  for (const a of graph.activities) {
-    if (a.aid === props.fromAid) {
-      fromActivity = a;
-    }
-
-    if (a.aid === props.toAid) {
-      toActivity = a;
-    }
-  }
+  const { graph, selectedElement, isAddingRelation, fromActivity, toActivity } = useAppSelector(
+    (state) => ({
+      graph: state.editor.graph,
+      selectedElement: state.editor.selectedElement,
+      isAddingRelation: state.editor.usingTool === ToolType.AddRelation,
+      fromActivity: state.editor.graph.activities.find((a) => a.aid === props.fromAid),
+      toActivity: state.editor.graph.activities.find((a) => a.aid === props.toAid),
+    })
+  );
 
   if (!fromActivity || !toActivity) {
     return <></>;
@@ -61,8 +67,6 @@ export const RelationToOther = (props: RelationToOtherProps) => {
 
   const fromPositions = getActivityRelationPoints(fromActivity);
   const toPositions = getActivityRelationPoints(toActivity);
-
-  // console.log(fromPositions, toPositions);
 
   const combinedPositions = [];
 
@@ -75,53 +79,12 @@ export const RelationToOther = (props: RelationToOtherProps) => {
       });
     }
   }
-
-  // console.log(combinedPositions);
-
-  let shortest = combinedPositions[0];
-
-  for (let i = 0; i < combinedPositions.length; i++) {
-    if (combinedPositions[i].distance < shortest.distance) {
-      shortest = combinedPositions[i];
-    }
-  }
-
-  // console.log(shortest);
+  combinedPositions.sort(compare);
+  const shortest = combinedPositions[props.index];
 
   const { x: x1, y: y1 } = shortest.from;
 
-  const { x: x2, y: y2 } = shortest.to;
-
-  // pointingToPostion = { x: x2, y: y2 };
-
-  // const { x: x1, y: y1 } = props.fromPosition;
-
-  // const { x: x2, y: y2 } = pointingToPostion;
-
   let color = getRelationColor(props.type);
-
-  const getActivityRect = ({ x, y }: Position) => ({
-    top: y,
-    bottom: y + activityHeight,
-    left: x,
-    right: x + activityWidth,
-  });
-
-  // const rect1 = getActivityRect({ x: x1, y: y1 });
-  // const rect2 = getActivityRect({ x: x2, y: y2 });
-
-  const getOuterRect = (r1: RectSides, r2: RectSides): RectSides => ({
-    top: Math.min(r1.top, r2.top),
-    bottom: Math.max(r1.bottom, r2.bottom),
-    left: Math.min(r1.left, r2.left),
-    right: Math.max(r1.right, r2.right),
-  });
-
-  // const getInnerXY = (r1: RectSides, r2: RectSides) => {};
-
-  // const outerRect = getOuterRect(rect1, rect2);
-  // const innerWidth = outerRect.right - outerRect.left - 2 * activityWidth;
-  // const innerHeight = outerRect.bottom - outerRect.top - 2 * activityHeight;
 
   const startDot = hasDot(props.type);
 

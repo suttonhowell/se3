@@ -128,7 +128,7 @@ export const Activity = (props: ActivityProps) => {
         )}
       </g>
       {props.relationsToOthers.map((rt, idx) => (
-        <RelationToOther key={rt.rid} fromAid={props.aid} toAid={rt.to} {...rt} />
+        <RelationToOther key={rt.rid} fromAid={props.aid} toAid={rt.to} index={idx} {...rt} />
       ))}
     </>
   );
