@@ -8,17 +8,27 @@ import {
   Markings,
   Position,
   RelationType,
+  Rid,
 } from '../../../../core/models';
 import { addRelationReducer } from './editorReducers';
 
 export enum ToolType {
   None = 'None',
   AddRelation = 'AddRelation',
+  EditRelation = 'EditRelation',
+}
+
+export enum SelectedElementType {
+  None = 'None',
+  Activity = 'Activity',
+  RelationToSelf = 'RelationToSelf',
+  RelationToOther = 'RelationToOther',
 }
 
 export interface EditorState {
   graph: DCRGraph;
-  selectedElement: Aid | null;
+  selectedElement: Aid | Rid | null;
+  selectedElementType: SelectedElementType;
   offset: Position | null;
   usingTool: ToolType;
   addRelationType: RelationType;
@@ -28,6 +38,7 @@ export interface EditorState {
 const initialState: EditorState = {
   graph: initialDCRGraph,
   selectedElement: null,
+  selectedElementType: SelectedElementType.None,
   offset: null,
   usingTool: ToolType.None,
   addRelationType: RelationType.PreCondition,
@@ -86,21 +97,40 @@ export const editorSlice = createSlice({
     deleteActivity: (state) => {
       const selectedElement = state.selectedElement;
       if (selectedElement === null) return;
-      state.graph.activities = state.graph.activities.filter(
-        (activity) => activity.aid !== selectedElement
-      );
+      if (state.selectedElementType === SelectedElementType.Activity) {
+        state.graph.activities = state.graph.activities.filter(
+          (activity) => activity.aid !== selectedElement
+        );
+      }
+      if (state.selectedElementType === SelectedElementType.RelationToSelf) {
+        const updatedActivities = state.graph.activities.map((a) => ({
+          ...a,
+          relationsToSelf: a.relationsToSelf.filter((r) => r.rid !== selectedElement),
+        }));
+        state.graph.activities = updatedActivities;
+      }
       state.selectedElement = null;
     },
-    selectElement: (state, action: PayloadAction<Aid | null>) => {
-      state.selectedElement = action.payload;
+    selectElement: (
+      state,
+      action: PayloadAction<{ id: Aid | Rid | null; type?: SelectedElementType }>
+    ) => {
+      state.selectedElement = action.payload.id;
+      state.selectedElementType = action.payload.type
+        ? action.payload.type
+        : SelectedElementType.None;
     },
     changeTitle: (state, action: PayloadAction<string>) => {
       state.graph.metaData.name = action.payload;
     },
     pickTool: (state, action: PayloadAction<ToolType>) => {
       state.usingTool = action.payload;
-      // Deselects element when a special tool is picked
-      if (action.payload !== ToolType.None) state.selectedElement = null;
+      if (action.payload === ToolType.EditRelation) return;
+      if (action.payload !== ToolType.None) {
+        // Deselects element when a special tool is picked
+        state.selectedElement = null;
+        state.selectedElementType = SelectedElementType.None;
+      }
       // Removes the addRelationArg if tool deactivated early
       if (action.payload !== ToolType.AddRelation) state.addRelationArgs = null;
     },
@@ -121,6 +151,18 @@ export const editorSlice = createSlice({
           : { ...activity, position: action.payload.position }
       );
       state.graph.activities = updatedActivities;
+    },
+    editRelation: (state, action: PayloadAction<RelationType>) => {
+      const selectedElement = state.selectedElement;
+      if (state.selectedElementType === SelectedElementType.RelationToSelf) {
+        const updatedActivities = state.graph.activities.map((a) => ({
+          ...a,
+          relationsToSelf: a.relationsToSelf.map((r) =>
+            r.rid !== selectedElement ? r : { ...r, type: action.payload }
+          ),
+        }));
+        state.graph.activities = updatedActivities;
+      }
     },
     changeStyle: (
       state,
@@ -164,6 +206,7 @@ export const {
   changeStyle,
   deleteActivity,
   selectElement,
+  editRelation,
 } = editorSlice.actions;
 
 export default editorSlice.reducer;

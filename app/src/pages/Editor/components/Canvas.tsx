@@ -1,6 +1,7 @@
 import { useDragSVGElement } from '../../../core/hooks/useDragSVGElement';
 import {
   addRelation,
+  SelectedElementType,
   selectElement,
   ToolType,
 } from '../../../core/redux/features/editor/editorSlice';
@@ -30,11 +31,11 @@ export const Canvas = () => {
     if (!isAddingRelation) {
       // Deselects element if the canvas is clicked
       if (selectedElement && target.id == 'canvas') {
-        dispatch(selectElement(null));
+        dispatch(selectElement({ id: null }));
       }
       // Selects the element if it an activity
       if (selectedElement && target.classList.contains('activity')) {
-        dispatch(selectElement(target.id));
+        dispatch(selectElement({ id: target.id, type: SelectedElementType.Activity }));
       }
     }
   };

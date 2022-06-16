@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import {
   circleRadius,
   endIconSizes,
@@ -34,7 +35,13 @@ export const ArrowHead = ({ rotateDeg, position, type }: ArrowHeadProps) => {
 
   return (
     <>
-      <path d={dString} fill={color} stroke={color} transform={`rotate(${rotateDeg},${x},${y})`} />
+      <Box
+        component="path"
+        d={dString}
+        fill={color}
+        stroke={color}
+        transform={`rotate(${rotateDeg},${x},${y})`}
+      />
       {type === RelationType.Condition && (
         <circle cx={symbolX} cy={symbolY} r={circleRadius} fill={color} />
       )}

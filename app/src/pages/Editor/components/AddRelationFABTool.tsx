@@ -2,12 +2,20 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { Autocomplete, Box, Fab, TextField, Tooltip, Zoom } from '@mui/material';
 import { useState } from 'react';
 import { RelationType } from '../../../core/models';
-import { chooseRelationType, pickTool, ToolType } from '../../../core/redux/features/editor/editorSlice';
+import {
+  chooseRelationType,
+  editRelation,
+  pickTool,
+  ToolType,
+} from '../../../core/redux/features/editor/editorSlice';
 import { useAppDispatch, useAppSelector } from '../../../core/redux/hooks';
 
 export const AddRelationFABTool = () => {
-  const { isAddRelationActive } = useAppSelector((state) => ({
+  const { isAddRelationActive, isEdittingRelation } = useAppSelector((state) => ({
     isAddRelationActive: state.editor.usingTool === ToolType.AddRelation,
+    isEdittingRelation: state.editor.usingTool === ToolType.EditRelation,
+    // state.editor.selectedElement !== null &&
+    // state.editor.selectedElementType === SelectedElementType.RelationToSelf &&
   }));
   const dispatch = useAppDispatch();
   const [chosenRelationType, setChosenRelationType] = useState(addRelationTypeItems[0]);
@@ -17,7 +25,7 @@ export const AddRelationFABTool = () => {
   };
 
   return (
-    <Zoom in={isAddRelationActive}>
+    <Zoom in={isAddRelationActive || isEdittingRelation}>
       <Box sx={{ position: 'absolute', bottom: 16, right: 16, width: 300, display: 'flex' }}>
         <Autocomplete
           options={addRelationTypeItems}
@@ -25,7 +33,11 @@ export const AddRelationFABTool = () => {
           disableClearable
           onChange={(event: any, newValue: AddRelationTypeItem) => {
             setChosenRelationType(newValue);
-            dispatch(chooseRelationType(newValue.type));
+            if (isEdittingRelation) {
+              dispatch(editRelation(newValue.type));
+            } else {
+              dispatch(chooseRelationType(newValue.type));
+            }
           }}
           renderInput={(params) => (
             <TextField

@@ -4,16 +4,16 @@ import { Aid } from './Activity';
 export type Rid = string;
 
 export enum RelationType {
-  PreCondition,
-  Response,
-  LogicalInclude,
-  NoResponse,
-  Include,
-  Exclude,
-  Spawn,
-  Condition,
-  Milestone,
-  Value,
+  PreCondition = 'PreCondition',
+  Response = 'Response',
+  LogicalInclude = 'LogicalInclude',
+  NoResponse = 'NoResponse',
+  Include = 'Include',
+  Exclude = 'Exclude',
+  Spawn = 'Spawn',
+  Condition = 'Condition',
+  Milestone = 'Milestone',
+  Value = 'Value',
 }
 
 export const getRelationColor = (type: RelationType) => {

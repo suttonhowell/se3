@@ -19,12 +19,14 @@ import {
   changeActivityLabel,
   changeMarking,
   changeStyle,
+  SelectedElementType,
 } from '../../../core/redux/features/editor/editorSlice';
 import { useAppDispatch, useAppSelector } from '../../../core/redux/hooks';
 
 export const ContextMenu = () => {
-  const { selectedElementAid, activities } = useAppSelector((state) => ({
+  const { selectedElementAid, activities, selectedElementIsActivity } = useAppSelector((state) => ({
     selectedElementAid: state.editor.selectedElement,
+    selectedElementIsActivity: state.editor.selectedElementType === SelectedElementType.Activity,
     activities: state.editor.graph.activities,
   }));
   const [selectedElement, setSelectedElement] = useState<Activity | null>(null);
@@ -92,7 +94,7 @@ export const ContextMenu = () => {
       anchor="right"
       hideBackdrop={true}
       variant="persistent"
-      open={selectedElementAid ? true : false}
+      open={selectedElementAid && selectedElementIsActivity ? true : false}
     >
       <Box sx={{ width: 300, p: 2 }}>
         <Toolbar />
