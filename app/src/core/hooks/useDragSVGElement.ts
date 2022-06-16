@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Position } from '../models/DCRGraph';
-import { moveActivity } from '../redux/features/editor/editorSlice';
+import { moveActivity, ToolType } from '../redux/features/editor/editorSlice';
 import { useAppSelector } from '../redux/hooks';
 
 const getRelativeMousePosition = (
@@ -37,10 +37,11 @@ type UseDragSVGElementHook = [
 
 export const useDragSVGElement = (): UseDragSVGElementHook => {
   const dispatch = useDispatch();
-  const { selectedElement } = useAppSelector((state) => ({
+  const { selectedElement, isAddingRelation } = useAppSelector((state) => ({
     selectedElement: state.editor.selectedElement
       ? state.editor.graph.activities.find((a) => a.aid === state.editor.selectedElement)
       : undefined,
+    isAddingRelation: state.editor.usingTool === ToolType.AddRelation,
   }));
   const canvasRef = useRef<SVGSVGElement>(null);
   const [aid, setAid] = useState<string>('');
@@ -49,7 +50,7 @@ export const useDragSVGElement = (): UseDragSVGElementHook => {
 
   const startDrag = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     const target = e.target as SVGElement;
-    if (target.classList.contains('draggable')) {
+    if (target.classList.contains('draggable') && !isAddingRelation) {
       const gElement = target.parentNode as SVGElement;
       const { x: mouseX, y: mouseY } = getRelativeMousePosition(e, canvasRef);
       const { x, y } = getTranslateXY(gElement);
@@ -63,7 +64,7 @@ export const useDragSVGElement = (): UseDragSVGElementHook => {
   };
 
   const drag = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
-    if (draggedElement && offset) {
+    if (draggedElement && offset && !isAddingRelation) {
       e.preventDefault();
       const { x, y } = getRelativeMousePosition(e, canvasRef);
       draggedElement.setAttributeNS(
@@ -75,7 +76,7 @@ export const useDragSVGElement = (): UseDragSVGElementHook => {
   };
 
   const endDrag = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
-    if (draggedElement && selectedElement) {
+    if (draggedElement && selectedElement && !isAddingRelation) {
       const { x, y } = getTranslateXY(draggedElement);
       // True if the activity was moved doing the dragging phase
       if (x !== selectedElement.position.x && y !== selectedElement.position.y) {
