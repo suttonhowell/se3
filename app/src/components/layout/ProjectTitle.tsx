@@ -45,7 +45,8 @@ export const ProjectTitle = () => {
     setIsTitleEditable((prevState) => !prevState);
   };
 
-  const handleOnSubmit = () => {
+  const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     dispatch(changeTitle(title));
     setIsTitleEditable(false);
   };

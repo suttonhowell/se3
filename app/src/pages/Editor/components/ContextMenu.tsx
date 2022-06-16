@@ -12,7 +12,7 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ColorPicker } from '../../../components/inputFields/ColorPicker';
 import { Activity, ActivityStyle, Aid, isActivity, Markings } from '../../../core/models/';
 import {
@@ -53,7 +53,8 @@ export const ContextMenu = () => {
     }
   }, [isLabelEditable]);
 
-  const handleOnSubmit = () => {
+  const handleOnSubmit = (e: React.FormEvent<HTMLFormElement> | React.MouseEvent) => {
+    e.preventDefault();
     if (isActivity(selectedElement)) {
       dispatch(changeActivityLabel({ label, aid: selectedElement.aid || '' }));
       setIsLabelEditable(false);
