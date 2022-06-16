@@ -80,6 +80,8 @@ export const editorSlice = createSlice({
     },
     addActivity: (state) => {
       state.graph.activities.push(initialActivity());
+      state.usingTool = ToolType.None;
+      state.addRelationArgs = null;
     },
     deleteActivity: (state) => {
       const selectedElement = state.selectedElement;
