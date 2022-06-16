@@ -102,19 +102,19 @@ export const TopToolbar = () => {
       >
         <ToolbarButtonGroup>
           <ToolbarButton
-            tooltipTitle="Undo last change"
+            tooltipTitle="Undo last change (not implemented)"
             disabledCondition={hasHistory}
             children={<UndoIcon />}
             onClick={handleOnClickUndo}
           />
           <ToolbarButton
-            tooltipTitle="Redo last change"
+            tooltipTitle="Redo last change (not implemented)"
             disabledCondition={hasHistory}
             children={<RedoIcon />}
             onClick={handleOnClickRedo}
           />
           <ToolbarButton
-            tooltipTitle="Show change history"
+            tooltipTitle="Show change history (not implemented)"
             disabledCondition={hasHistory}
             children={<HistoryIcon />}
             onClick={handleOnClickHistory}
@@ -122,7 +122,7 @@ export const TopToolbar = () => {
         </ToolbarButtonGroup>
         <ToolbarButtonGroup>
           <ButtonDropDown
-            tooltipTitle="Zoom"
+            tooltipTitle="Zoom (not implemented)"
             buttonText={zoomLevel + '%'}
             menuItems={zoomItemList}
             onClickMenuItem={handleOnZoomLevelClick}
@@ -130,13 +130,13 @@ export const TopToolbar = () => {
         </ToolbarButtonGroup>
         <ToolbarButtonGroup>
           <ToolbarButton
-            tooltipTitle="Zoom in"
+            tooltipTitle="Zoom in (not implemented)"
             disabledCondition={zoomLevel === zoomLevelsIncrements.at(-1)}
             children={<ZoomInIcon />}
             onClick={handleOnClickZoomIn}
           />
           <ToolbarButton
-            tooltipTitle="Zoom out"
+            tooltipTitle="Zoom out (not implemented)"
             disabledCondition={zoomLevel === zoomLevelsIncrements[0]}
             children={<ZoomOutIcon />}
             onClick={handleOnClickZoomOut}
@@ -144,7 +144,7 @@ export const TopToolbar = () => {
         </ToolbarButtonGroup>
         <ToolbarButtonGroup>
           <ToolbarButton
-            tooltipTitle="Delete selected"
+            tooltipTitle="Delete selected (Delete/Backspace)"
             disabledCondition={!hasSelected}
             children={<DeleteIcon />}
             onClick={handleOnClickDelete}
@@ -153,7 +153,9 @@ export const TopToolbar = () => {
         <ToolbarButtonGroup>
           <ToolbarButton
             tooltipTitle={
-              (isRelationToolActive ? 'Deactivate' : 'Activate') + '"Add relation tool"'
+              isRelationToolActive
+                ? 'Deactivate "Add relation tool" (Esacpe)'
+                : 'Activate "Add relation tool"'
             }
             disabledCondition={!hasActivities}
             iconButtonProps={{ color: isRelationToolActive ? 'primary' : 'default' }}
