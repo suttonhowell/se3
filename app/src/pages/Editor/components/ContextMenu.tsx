@@ -95,6 +95,11 @@ export const ContextMenu = () => {
       hideBackdrop={true}
       variant="persistent"
       open={selectedElementAid && selectedElementIsActivity ? true : false}
+      PaperProps={{
+        sx: (theme) => ({
+          zIndex: theme.zIndex.drawer - 1,
+        }),
+      }}
     >
       <Box sx={{ width: 300, p: 2 }}>
         <Toolbar />

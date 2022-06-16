@@ -109,6 +109,13 @@ export const editorSlice = createSlice({
         }));
         state.graph.activities = updatedActivities;
       }
+      if (state.selectedElementType === SelectedElementType.RelationToOther) {
+        const updatedActivities = state.graph.activities.map((a) => ({
+          ...a,
+          relationsToOthers: a.relationsToOthers.filter((r) => r.rid !== selectedElement),
+        }));
+        state.graph.activities = updatedActivities;
+      }
       state.selectedElement = null;
     },
     selectElement: (
@@ -119,6 +126,15 @@ export const editorSlice = createSlice({
       state.selectedElementType = action.payload.type
         ? action.payload.type
         : SelectedElementType.None;
+      state.usingTool = ToolType.None;
+      // if (action.payload.type === SelectedElementType.RelationToOther) {
+      //   const parent = state.graph.activities.find((a) =>
+      //     a.relationsToOthers.some((r) => r.rid === action.payload.id)
+      //   );
+      //   console.log(parent);
+      //   const relation = parent?.relationsToOthers.find((r) => r.rid === action.payload.id);
+      //   state.addRelationType === relation?.type || RelationType.PreCondition;
+      // }
     },
     changeTitle: (state, action: PayloadAction<string>) => {
       state.graph.metaData.name = action.payload;
@@ -158,6 +174,15 @@ export const editorSlice = createSlice({
         const updatedActivities = state.graph.activities.map((a) => ({
           ...a,
           relationsToSelf: a.relationsToSelf.map((r) =>
+            r.rid !== selectedElement ? r : { ...r, type: action.payload }
+          ),
+        }));
+        state.graph.activities = updatedActivities;
+      }
+      if (state.selectedElementType === SelectedElementType.RelationToOther) {
+        const updatedActivities = state.graph.activities.map((a) => ({
+          ...a,
+          relationsToOthers: a.relationsToOthers.map((r) =>
             r.rid !== selectedElement ? r : { ...r, type: action.payload }
           ),
         }));

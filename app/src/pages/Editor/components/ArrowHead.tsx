@@ -114,6 +114,7 @@ export const ArrowHead = ({ rotateDeg, position, type }: ArrowHeadProps) => {
           fontSize={endIconSizes[0]}
           pointerEvents="none"
           stroke={color}
+          style={{ userSelect: 'none' }}
         >
           %
         </text>
@@ -126,6 +127,7 @@ export const ArrowHead = ({ rotateDeg, position, type }: ArrowHeadProps) => {
           fontSize={endIconSizes[1]}
           pointerEvents="none"
           stroke="none"
+          style={{ userSelect: 'none' }}
         >
           =
         </text>
@@ -138,6 +140,7 @@ export const ArrowHead = ({ rotateDeg, position, type }: ArrowHeadProps) => {
           fontSize={endIconSizes[2]}
           pointerEvents="none"
           stroke="none"
+          style={{ userSelect: 'none' }}
         >
           ＊
         </text>

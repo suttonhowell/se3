@@ -1,5 +1,5 @@
 import useEventListener from '../../core/hooks/useEventListener';
-import { deleteActivity } from '../../core/redux/features/editor/editorSlice';
+import { deleteActivity, pickTool, ToolType } from '../../core/redux/features/editor/editorSlice';
 import { useAppDispatch } from '../../core/redux/hooks';
 import { AddActivity } from './components/AddActivity';
 import { AddRelationFABTool } from './components/AddRelationFABTool';
@@ -12,6 +12,7 @@ export const Editor = () => {
 
   const onKeyPress = (e: KeyboardEvent) => {
     const key = e.key;
+    console.log(key);
     const titleInputRef = document.getElementById('title-input');
     const activityLabelInputRef = document.getElementById('activity-label-input');
     const activeElement = document.activeElement;
@@ -21,6 +22,9 @@ export const Editor = () => {
       activeElement !== titleInputRef
     ) {
       dispatch(deleteActivity());
+    }
+    if (key === 'Escape') {
+      dispatch(pickTool(ToolType.None));
     }
   };
 

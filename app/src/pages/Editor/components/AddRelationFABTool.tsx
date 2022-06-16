@@ -14,8 +14,6 @@ export const AddRelationFABTool = () => {
   const { isAddRelationActive, isEdittingRelation } = useAppSelector((state) => ({
     isAddRelationActive: state.editor.usingTool === ToolType.AddRelation,
     isEdittingRelation: state.editor.usingTool === ToolType.EditRelation,
-    // state.editor.selectedElement !== null &&
-    // state.editor.selectedElementType === SelectedElementType.RelationToSelf &&
   }));
   const dispatch = useAppDispatch();
   const [chosenRelationType, setChosenRelationType] = useState(addRelationTypeItems[0]);

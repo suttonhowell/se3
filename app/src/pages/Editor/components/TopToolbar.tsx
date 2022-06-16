@@ -86,8 +86,20 @@ export const TopToolbar = () => {
   };
 
   return (
-    <AppBar position="relative" color="inherit" elevation={4}>
-      <Toolbar disableGutters variant="dense" sx={{ minHeight: 'unset', py: 0.5 }}>
+    <AppBar
+      position="relative"
+      color="inherit"
+      elevation={4}
+      sx={(theme) => ({
+        zIndex: theme.zIndex.drawer,
+      })}
+    >
+      <Toolbar
+        disableGutters
+        variant="dense"
+        sx={{ minHeight: 'unset', py: 0.5 }}
+        // sx={(theme) => ({ minHeight: 'unset', py: 0.5, zIndex: theme.zIndex.drawer })}
+      >
         <ToolbarButtonGroup>
           <ToolbarButton
             tooltipTitle="Undo last change"
