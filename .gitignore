@@ -85,8 +85,5 @@ typings/
 # Webpack
 .webpack/
 
-# Electron-Forge
-out/
-
 # Code settings
 .vscode/
