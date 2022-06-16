@@ -12,7 +12,6 @@ export const Editor = () => {
 
   const onKeyPress = (e: KeyboardEvent) => {
     const key = e.key;
-    console.log(key);
     const titleInputRef = document.getElementById('title-input');
     const activityLabelInputRef = document.getElementById('activity-label-input');
     const activeElement = document.activeElement;
