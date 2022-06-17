@@ -93,7 +93,8 @@ export const editorSlice = createSlice({
       }
     },
     addActivity: (state) => {
-      state.graph.activities.push(initialActivity());
+      const numActivities = state.graph.activities.length;
+      state.graph.activities.push(initialActivity(numActivities));
       state.usingTool = ToolType.None;
       state.addRelationArgs = null;
     },

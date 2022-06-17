@@ -30,24 +30,29 @@ export interface Activity {
 }
 
 // TODO check that Aids are not the same when a new one is created
-export const initialActivity = (): Activity => ({
-  aid: uuidv4(),
-  label: 'Activity',
-  position: { x: 100, y: 100 },
-  markings: {
-    pending: false,
-    included: true,
-    executed: false,
-  },
-  style: {
-    borderColor: 'black',
-    bgColor: 'white',
-    textColor: 'black',
-  },
-  relationsToSelf: [],
-  relationsToOthers: [],
-  nestedActivities: [],
-});
+export const initialActivity = (numActivity: number): Activity => {
+  const numActivities = numActivity >= 40 ? numActivity % 40 : numActivity;
+  const column = Math.floor(numActivities / 10);
+  const remainder = numActivities % 10;
+  return {
+    aid: uuidv4(),
+    label: 'Activity',
+    position: { x: 50 + 20 * remainder + 100 * column, y: 50 + 20 * remainder },
+    markings: {
+      pending: false,
+      included: true,
+      executed: false,
+    },
+    style: {
+      borderColor: 'black',
+      bgColor: 'white',
+      textColor: 'black',
+    },
+    relationsToSelf: [],
+    relationsToOthers: [],
+    nestedActivities: [],
+  };
+};
 
 export const isActivity = (obj: any): obj is Activity => {
   return (
