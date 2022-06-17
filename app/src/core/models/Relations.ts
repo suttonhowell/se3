@@ -51,9 +51,12 @@ export const hasDot = (type: RelationType) => {
   );
 };
 
-export interface RelationToSelf {
-  rid: Rid;
+interface Relation {
   type: RelationType;
+  rid: Rid;
+}
+
+export interface RelationToSelf extends Relation {
   aid: Aid;
 }
 
@@ -64,11 +67,9 @@ export const createNewRelationsToSelf = (
   return { rid: uuidv4(), type, aid };
 };
 
-export interface RelationToOther {
-  rid: Rid;
+export interface RelationToOther extends Relation {
   from: Aid;
   to: Aid;
-  type: RelationType;
 }
 
 export const createNewRelationToOther = (
