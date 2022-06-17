@@ -16,24 +16,11 @@ import { RelationToSelf } from './RelationToSelf';
 interface ActivityProps extends ActivityType {}
 
 export const Activity = (props: ActivityProps) => {
-  const { selectedElement, isAddingRelation, addRelationArgs, graph } = useAppSelector((state) => ({
+  const { selectedElement, isAddingRelation, addRelationArgs } = useAppSelector((state) => ({
     selectedElement: state.editor.selectedElement,
     isAddingRelation: state.editor.usingTool === ToolType.AddRelation,
     addRelationArgs: state.editor.addRelationArgs,
-    graph: state.editor.graph,
   }));
-
-  let activity = null;
-  for (const a of graph.activities) {
-    if (a.aid === props.aid) {
-      activity = a;
-      break;
-    }
-  }
-  // let points: Position[] = [];
-  // if (activity) {
-  //   points = getActivityRelationPoints(activity);
-  // }
 
   return (
     <>
